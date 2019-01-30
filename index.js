@@ -16,19 +16,24 @@ function isAlreadyInMocha() {
   });
 }
 
-function getNewTitle(suffix, dirname) {
+function getNewTitle(suffix, dirname, {
+  titleSeparator = titleSep,
+  titleize: _titleize = true
+}) {
   let callerFilePath = callsites()[2].getFileName();
   let baseDir = commondir([callerFilePath, dirname]);
   let testFilePath = callerFilePath.substr(baseDir.length + 1);
   let sections = testFilePath.replace(/-test\.js$/, '').split(path.sep);
-  sections = sections.map(titleize);
+  if (_titleize) {
+    sections = sections.map(titleize);
+  }
   if (suffix) {
     sections.push(suffix);
   }
-  return sections.join(titleSep);
+  return sections.join(titleSeparator);
 }
 
-function wrapDirname(dirname) {
+function wrapOptions(dirname, options = {}) {
   return function wrapMocha(mocha) {
     return function newMocha(title, callback) {
       if (!callback) {
@@ -39,7 +44,7 @@ function wrapDirname(dirname) {
       }
 
       if (!isAlreadyInMocha()) {
-        title = getNewTitle(title, dirname);
+        title = getNewTitle(title, dirname, options);
       }
 
       return mocha.call(mocha, title, callback);
@@ -47,8 +52,8 @@ function wrapDirname(dirname) {
   };
 }
 
-module.exports = function install({ exports }, dirname) {
-  let wrapMocha = wrapDirname(dirname);
+module.exports = function install({ exports }, dirname, options) {
+  let wrapMocha = wrapOptions(dirname, options);
 
   exports.describe = wrapMocha(describe);
   exports.describe.only = wrapMocha(describe.only);
