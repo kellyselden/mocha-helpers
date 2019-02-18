@@ -11,7 +11,7 @@ function isAlreadyInMocha() {
   return callsites().some(callsite => {
     let functionName = callsite.getFunctionName();
     if (functionName) {
-      return /^context\.(describe|it)/.test(functionName);
+      return /context\.(describe|it)/.test(functionName);
     }
   });
 }
