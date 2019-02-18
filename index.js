@@ -16,7 +16,7 @@ function isAlreadyInMocha() {
   });
 }
 
-function getNewTitle(suffix, dirname, {
+function getNewTitle(title, dirname, {
   titleSeparator = titleSep,
   titleize: _titleize = true
 }) {
@@ -27,8 +27,8 @@ function getNewTitle(suffix, dirname, {
   if (_titleize) {
     sections = sections.map(titleize);
   }
-  if (suffix) {
-    sections.push(suffix);
+  if (title) {
+    sections[sections.length - 1] = title;
   }
   return sections.join(titleSeparator);
 }
