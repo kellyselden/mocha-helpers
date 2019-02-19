@@ -27,7 +27,7 @@ function getNewTitle(title, dirname, {
   if (_titleize) {
     sections = sections.map(titleize);
   }
-  if (title !== undefined) {
+  if (title !== undefined && title !== null) {
     sections.pop();
     if (title) {
       sections.push(title);
@@ -41,7 +41,7 @@ function wrapOptions(dirname, options = {}) {
     return function newMocha(title, callback) {
       if (!callback) {
         callback = title;
-        title = '';
+        title = null;
       } else if (typeof title === 'function') {
         title = title.name;
       }
