@@ -27,8 +27,11 @@ function getNewTitle(title, dirname, {
   if (_titleize) {
     sections = sections.map(titleize);
   }
-  if (title) {
-    sections[sections.length - 1] = title;
+  if (title !== undefined) {
+    sections.pop();
+    if (title) {
+      sections.push(title);
+    }
   }
   return sections.join(titleSeparator);
 }
