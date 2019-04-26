@@ -23,6 +23,10 @@ describe(function() {
   it(myFunction, function() {
     // stuff
   });
+
+  it.allowFail('skip on error', function() {
+    assert.ok(false);
+  });
 });
 ```
 

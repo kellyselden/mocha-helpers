@@ -55,6 +55,23 @@ function wrapOptions(dirname, options = {}) {
   };
 }
 
+function skipOnError(callback) {
+  return function() {
+    return Promise.resolve().then(() => {
+      return callback.apply(this, arguments);
+    }).catch(() => {
+      this.skip();
+    });
+  };
+}
+
+// I wish mocha had "allow failures".
+// https://github.com/mochajs/mocha/issues/1480#issuecomment-487074628
+// https://github.com/mochajs/mocha/issues/2451#issuecomment-487074749
+function allowFail(title, callback) {
+  it(title, skipOnError(callback));
+}
+
 module.exports = function install({ exports }, dirname, options) {
   let wrapMocha = wrapOptions(dirname, options);
 
@@ -64,4 +81,6 @@ module.exports = function install({ exports }, dirname, options) {
   exports.it = wrapMocha(it);
   exports.it.only = wrapMocha(it.only);
   exports.it.skip = wrapMocha(it.skip);
+
+  exports.it.allowFail = allowFail;
 }
