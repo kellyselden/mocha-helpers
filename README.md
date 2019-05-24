@@ -42,6 +42,7 @@ Prints:
 ```js
 require('mocha-helpers')(module, __dirname, {
   titleSeparator: ' | ',
-  titleize: true
+  titleize: true,
+  prefix: ''
 });
 ```

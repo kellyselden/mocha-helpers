@@ -18,12 +18,17 @@ function isAlreadyInMocha() {
 
 function getNewTitle(title, dirname, {
   titleSeparator = titleSep,
-  titleize: _titleize = true
+  titleize: _titleize = true,
+  prefix = ''
 }) {
   let callerFilePath = callsites()[2].getFileName();
   let baseDir = commondir([callerFilePath, dirname]);
   let testFilePath = callerFilePath.substr(baseDir.length + 1);
-  let sections = testFilePath.replace(/-test\.js$/, '').split(path.sep);
+  let sections = [];
+  if (prefix) {
+    sections.push(prefix);
+  }
+  sections = sections.concat(testFilePath.replace(/-test\.js$/, '').split(path.sep));
   if (_titleize) {
     sections = sections.map(titleize);
   }
