@@ -61,12 +61,12 @@ function wrapOptions(dirname, options = {}) {
 }
 
 function skipOnError(callback) {
-  return function() {
-    return Promise.resolve().then(() => {
-      return callback.apply(this, arguments);
-    }).catch(() => {
+  return async function() {
+    try {
+      await callback.apply(this, arguments);
+    } catch (err) {
       this.skip();
-    });
+    }
   };
 }
 
