@@ -9,7 +9,7 @@ Place this file somewhere in your test directory:
 
 ```js
 // test/helpers/mocha.js
-require('mocha-helpers')(module, __dirname);
+require('mocha-helpers')(module);
 ```
 
 Then use it via:
@@ -40,7 +40,8 @@ Prints:
 ## Options
 
 ```js
-require('mocha-helpers')(module, __dirname, {
+require('mocha-helpers')(module, {
+  dirname: __dirname,
   titleSeparator: ' | ',
   titleize: true,
   prefix: ''
