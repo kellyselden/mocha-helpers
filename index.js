@@ -16,33 +16,35 @@ function isAlreadyInMocha() {
   });
 }
 
-function getNewTitle(title, {
+function newTitleGenerator({
   dirname,
   titleSeparator = titleSep,
   titleize: _titleize = true,
   prefix = ''
 }) {
-  let callerFilePath = callsites()[2].getFileName();
-  let baseDir = commondir([callerFilePath, dirname]);
-  let testFilePath = callerFilePath.substr(baseDir.length + 1);
-  let sections = [];
-  if (prefix) {
-    sections.push(prefix);
-  }
-  sections = sections.concat(testFilePath.replace(/-test\.js$/, '').split(path.sep));
-  if (_titleize) {
-    sections = sections.map(titleize);
-  }
-  if (title !== undefined && title !== null) {
-    sections.pop();
-    if (title) {
-      sections.push(title);
+  return function getNewTitle(title) {
+    let callerFilePath = callsites()[2].getFileName();
+    let baseDir = commondir([callerFilePath, dirname]);
+    let testFilePath = callerFilePath.substr(baseDir.length + 1);
+    let sections = [];
+    if (prefix) {
+      sections.push(prefix);
     }
-  }
-  return sections.join(titleSeparator);
+    sections = sections.concat(testFilePath.replace(/-test\.js$/, '').split(path.sep));
+    if (_titleize) {
+      sections = sections.map(titleize);
+    }
+    if (title !== undefined && title !== null) {
+      sections.pop();
+      if (title) {
+        sections.push(title);
+      }
+    }
+    return sections.join(titleSeparator);
+  };
 }
 
-function wrapOptions(options) {
+function wrapNewTitle(getNewTitle) {
   return function wrapMocha(mocha) {
     return function newMocha(title, callback) {
       if (!callback) {
@@ -53,7 +55,7 @@ function wrapOptions(options) {
       }
 
       if (!isAlreadyInMocha()) {
-        title = getNewTitle(title, options);
+        title = getNewTitle(title);
       }
 
       return mocha.call(mocha, title, callback);
@@ -81,10 +83,12 @@ function allowFail(title, callback) {
 function install({ exports }, options) {
   let callerFilePath = callsites()[1].getFileName();
 
-  let wrapMocha = wrapOptions({
+  let getNewTitle = newTitleGenerator({
     dirname: path.dirname(callerFilePath),
     ...options
   });
+
+  let wrapMocha = wrapNewTitle(getNewTitle);
 
   exports.describe = wrapMocha(describe);
   exports.describe.only = wrapMocha(describe.only);
@@ -94,6 +98,10 @@ function install({ exports }, options) {
   exports.it.skip = wrapMocha(it.skip);
 
   exports.it.allowFail = allowFail;
+
+  return {
+    getNewTitle
+  };
 }
 
 module.exports = install;
