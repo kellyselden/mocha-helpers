@@ -78,7 +78,7 @@ function allowFail(title, callback) {
   it(title, skipOnError(callback));
 }
 
-module.exports = function install({ exports }, options) {
+function install({ exports }, options) {
   let callerFilePath = callsites()[1].getFileName();
 
   let wrapMocha = wrapOptions({
@@ -95,3 +95,6 @@ module.exports = function install({ exports }, options) {
 
   exports.it.allowFail = allowFail;
 }
+
+module.exports = install;
+module.exports.isAlreadyInMocha = isAlreadyInMocha;
