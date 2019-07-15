@@ -87,10 +87,12 @@ function allowFail(title, callback) {
 function install({ exports }, options) {
   let callerFilePath = callsites()[1].getFileName();
 
-  let getNewTitle = newTitleGenerator({
+  options = {
     dirname: path.dirname(callerFilePath),
     ...options
-  });
+  };
+
+  let getNewTitle = newTitleGenerator(options);
 
   let wrapMocha = wrapNewTitle(getNewTitle);
 
@@ -102,6 +104,14 @@ function install({ exports }, options) {
   exports.it.skip = wrapMocha(it.skip);
 
   exports.it.allowFail = allowFail;
+
+  getNewTitle = newTitleGenerator({
+    ...options,
+    ...{
+      // prevent double prefix application
+      prefix: null
+    }
+  });
 
   return {
     getNewTitle
