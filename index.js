@@ -51,6 +51,10 @@ function wrapNewTitle(getNewTitle) {
         callback = title;
         title = null;
       } else if (typeof title === 'function') {
+        if (!title.name) {
+          throw new Error('Passed a function with no name.');
+        }
+
         title = title.name;
       }
 
