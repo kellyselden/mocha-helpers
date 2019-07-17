@@ -22,25 +22,28 @@ function newTitleGenerator({
   titleize: _titleize = true,
   prefix = ''
 }) {
-  return function getNewTitle(title) {
-    let callerFilePath = callsites()[2].getFileName();
-    let baseDir = commondir([callerFilePath, dirname]);
-    let testFilePath = callerFilePath.substr(baseDir.length + 1);
-    let sections = [];
-    if (prefix) {
-      sections.push(prefix);
-    }
-    sections = sections.concat(testFilePath.replace(/-test\.js$/, '').split(path.sep));
-    if (_titleize) {
-      sections = sections.map(titleize);
-    }
-    if (title !== undefined && title !== null) {
-      sections.pop();
-      if (title) {
-        sections.push(title);
+  return {
+    titleSeparator,
+    getNewTitle(title) {
+      let callerFilePath = callsites()[2].getFileName();
+      let baseDir = commondir([callerFilePath, dirname]);
+      let testFilePath = callerFilePath.substr(baseDir.length + 1);
+      let sections = [];
+      if (prefix) {
+        sections.push(prefix);
       }
+      sections = sections.concat(testFilePath.replace(/-test\.js$/, '').split(path.sep));
+      if (_titleize) {
+        sections = sections.map(titleize);
+      }
+      if (title !== undefined && title !== null) {
+        sections.pop();
+        if (title) {
+          sections.push(title);
+        }
+      }
+      return sections.join(titleSeparator);
     }
-    return sections.join(titleSeparator);
   };
 }
 
@@ -92,7 +95,7 @@ function install({ exports }, options) {
     ...options
   };
 
-  let getNewTitle = newTitleGenerator(options);
+  let { getNewTitle } = newTitleGenerator(options);
 
   let wrapMocha = wrapNewTitle(getNewTitle);
 
@@ -105,17 +108,13 @@ function install({ exports }, options) {
 
   exports.it.allowFail = allowFail;
 
-  getNewTitle = newTitleGenerator({
+  return newTitleGenerator({
     ...options,
     ...{
       // prevent double prefix application
       prefix: null
     }
   });
-
-  return {
-    getNewTitle
-  };
 }
 
 module.exports = install;
