@@ -24,7 +24,7 @@ function newTitleGenerator({
 }) {
   return {
     titleSeparator,
-    getNewTitle(suffix) {
+    getFilePathTitle(suffix) {
       let callerFilePath = callsites()[2].getFileName();
       let baseDir = commondir([callerFilePath, dirname]);
       let testFilePath = callerFilePath.substr(baseDir.length + 1);
@@ -59,7 +59,7 @@ function formatTitle(title) {
   return title;
 }
 
-function wrapNewTitle(getNewTitle) {
+function wrapNewTitle(getFilePathTitle) {
   return function wrapMocha(mocha) {
     return function newMocha(title, callback) {
       if (!callback) {
@@ -70,7 +70,7 @@ function wrapNewTitle(getNewTitle) {
       }
 
       if (!isAlreadyInMocha()) {
-        title = getNewTitle(title);
+        title = getFilePathTitle(title);
       }
 
       return mocha.call(mocha, title, callback);
@@ -103,9 +103,9 @@ function install({ exports }, options) {
     ...options
   };
 
-  let { getNewTitle } = newTitleGenerator(options);
+  let { getFilePathTitle } = newTitleGenerator(options);
 
-  let wrapMocha = wrapNewTitle(getNewTitle);
+  let wrapMocha = wrapNewTitle(getFilePathTitle);
 
   exports.describe = wrapMocha(describe);
   exports.describe.only = wrapMocha(describe.only);
