@@ -24,7 +24,7 @@ function newTitleGenerator({
 }) {
   return {
     titleSeparator,
-    getNewTitle(title) {
+    getNewTitle(suffix) {
       let callerFilePath = callsites()[2].getFileName();
       let baseDir = commondir([callerFilePath, dirname]);
       let testFilePath = callerFilePath.substr(baseDir.length + 1);
@@ -36,10 +36,10 @@ function newTitleGenerator({
       if (_titleize) {
         sections = sections.map(titleize);
       }
-      if (title !== undefined && title !== null) {
+      if (suffix !== undefined && suffix !== null) {
         sections.pop();
-        if (title) {
-          sections.push(title);
+        if (suffix) {
+          sections.push(suffix);
         }
       }
       return sections.join(titleSeparator);
