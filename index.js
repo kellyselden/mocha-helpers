@@ -47,18 +47,26 @@ function newTitleGenerator({
   };
 }
 
+function formatTitle(title) {
+  if (typeof title === 'function') {
+    if (!title.name) {
+      throw new Error('Passed a function with no name.');
+    }
+
+    title = title.name;
+  }
+
+  return title;
+}
+
 function wrapNewTitle(getNewTitle) {
   return function wrapMocha(mocha) {
     return function newMocha(title, callback) {
       if (!callback) {
         callback = title;
         title = null;
-      } else if (typeof title === 'function') {
-        if (!title.name) {
-          throw new Error('Passed a function with no name.');
-        }
-
-        title = title.name;
+      } else {
+        title = formatTitle(title);
       }
 
       if (!isAlreadyInMocha()) {
@@ -119,3 +127,4 @@ function install({ exports }, options) {
 
 module.exports = install;
 module.exports.isAlreadyInMocha = isAlreadyInMocha;
+module.exports.formatTitle = formatTitle;
