@@ -59,8 +59,10 @@ function formatTitle(title) {
   return title;
 }
 
-function wrapNewTitle(getFilePathTitle) {
+function wrapNewTitle(getFilePathTitle, options) {
   return function wrapMocha(mocha) {
+    mocha.titleSeparator = options.titleSeparator;
+
     return function newMocha(title, callback) {
       if (!callback) {
         callback = title;
@@ -105,7 +107,7 @@ function install({ exports }, options) {
 
   let { getFilePathTitle } = newTitleGenerator(options);
 
-  let wrapMocha = wrapNewTitle(getFilePathTitle);
+  let wrapMocha = wrapNewTitle(getFilePathTitle, options);
 
   exports.describe = wrapMocha(describe);
   exports.describe.only = wrapMocha(describe.only);
