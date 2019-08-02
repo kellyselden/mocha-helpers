@@ -128,3 +128,4 @@ function install({ exports }, options) {
 module.exports = install;
 module.exports.isAlreadyInMocha = isAlreadyInMocha;
 module.exports.formatTitle = formatTitle;
+module.exports.titleSeparator = titleSep;
