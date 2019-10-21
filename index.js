@@ -64,7 +64,7 @@ function wrapNewTitle(getFilePathTitle, options) {
     mocha.titleSeparator = options.titleSeparator;
 
     return function newMocha(title, callback) {
-      if (!callback) {
+      if (!callback && typeof title !== 'string') {
         callback = title;
         title = null;
       } else {
