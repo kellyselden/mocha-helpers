@@ -105,7 +105,9 @@ function install({ exports }, options) {
     ...options
   };
 
-  let { getFilePathTitle } = newTitleGenerator(options);
+  let titleGeneratorResult = newTitleGenerator(options);
+
+  let { getFilePathTitle } = titleGeneratorResult;
 
   let wrapMocha = wrapNewTitle(getFilePathTitle, options);
 
@@ -118,13 +120,7 @@ function install({ exports }, options) {
 
   exports.it.allowFail = allowFail;
 
-  return newTitleGenerator({
-    ...options,
-    ...{
-      // prevent double prefix application
-      prefix: null
-    }
-  });
+  return titleGeneratorResult;
 }
 
 module.exports = install;
