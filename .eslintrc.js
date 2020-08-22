@@ -6,8 +6,7 @@ module.exports = {
     ecmaVersion: 2018
   },
   env: {
-    es6: true,
-    mocha: true
+    es6: true
   },
   extends: [
     'sane-node'
