@@ -1,6 +1,6 @@
 {
   "name": "mocha-helpers",
-  "version": "4.3.2",
+  "version": "4.3.3",
   "description": "Mocha convenience helpers",
   "main": "index.js",
   "scripts": {
