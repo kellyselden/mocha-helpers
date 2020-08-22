@@ -39,6 +39,48 @@ Prints:
     ✓ myFunction
 ```
 
+## Retry Hooks
+
+Make hooks follow `--retries` logic. https://github.com/mochajs/mocha/issues/2127.
+
+```js
+// test/helpers/mocha.js
+require('mocha-helpers')(module, {
+  retryHooks: true
+});
+```
+
+Then use it via:
+
+```js
+// test/my-test.js
+const { describe, beforeEach } = require('./helpers/mocha');
+
+describe(function() {
+  let retries = 0;
+  beforeEach(function() {
+    if (retries++ < 1) {
+      throw new Error();
+    }
+  });
+
+  it('works', function() {
+    // stuff
+  });
+});
+```
+
+```
+mocha test/my-test.js --retries 1
+```
+
+Prints:
+
+```
+  My-Test
+    ✓ works
+```
+
 ## Options
 
 ```js
@@ -46,6 +88,7 @@ require('mocha-helpers')(module, {
   dirname: __dirname,
   titleSeparator: ' | ',
   titleize: true,
-  prefix: ''
+  prefix: '',
+  retryHooks: false
 });
 ```
