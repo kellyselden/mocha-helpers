@@ -94,7 +94,7 @@ function skipOnError(callback) {
 // https://github.com/mochajs/mocha/issues/1480#issuecomment-487074628
 // https://github.com/mochajs/mocha/issues/2451#issuecomment-487074749
 function allowFail(title, callback) {
-  it(title, skipOnError(callback));
+  global.it(title, skipOnError(callback));
 }
 
 function install({ exports }, options) {
@@ -111,12 +111,12 @@ function install({ exports }, options) {
 
   let wrapMocha = wrapNewTitle(getFilePathTitle, options);
 
-  exports.describe = wrapMocha(describe);
-  exports.describe.only = wrapMocha(describe.only);
-  exports.describe.skip = wrapMocha(describe.skip);
-  exports.it = wrapMocha(it);
-  exports.it.only = wrapMocha(it.only);
-  exports.it.skip = wrapMocha(it.skip);
+  exports.describe = wrapMocha(global.describe);
+  exports.describe.only = wrapMocha(global.describe.only);
+  exports.describe.skip = wrapMocha(global.describe.skip);
+  exports.it = wrapMocha(global.it);
+  exports.it.only = wrapMocha(global.it.only);
+  exports.it.skip = wrapMocha(global.it.skip);
 
   exports.it.allowFail = allowFail;
 
