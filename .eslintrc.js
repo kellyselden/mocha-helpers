@@ -1,20 +1,15 @@
+'use strict';
+
 module.exports = {
   root: true,
   parserOptions: {
     ecmaVersion: 2018
   },
-  plugins: [
-    'node'
-  ],
-  extends: [
-    'eslint:recommended',
-    'plugin:node/recommended'
-  ],
   env: {
     es6: true,
-    node: true,
     mocha: true
   },
-  rules: {
-  }
+  extends: [
+    'sane-node'
+  ]
 };
