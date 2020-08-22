@@ -10,5 +10,24 @@ module.exports = {
   },
   extends: [
     'sane-node'
+  ],
+  overrides: [
+    {
+      files: [
+        'test/**/*-test.js'
+      ],
+      env: {
+        mocha: true
+      },
+      plugins: [
+        'mocha'
+      ],
+      extends: [
+        'plugin:mocha/recommended'
+      ],
+      rules: {
+        'mocha/no-exclusive-tests': 'error'
+      }
+    }
   ]
 };

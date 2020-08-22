@@ -12,6 +12,8 @@ cache:
 jobs:
   include:
   - name: test
+    before_script:
+    - npm run lint
   - if: branch = master AND type = pull_request
     name: ember-cli-update
     script:
