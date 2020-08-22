@@ -97,6 +97,32 @@ function allowFail(title, callback, ...args) {
   return global.it.call(this, title, skipOnError(callback), ...args);
 }
 
+function wrapHook(hook, options) {
+  return function mochaHook(callback, ...args) {
+    return global[hook].call(this, async function() {
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        try {
+          return await callback.call(this, arguments);
+        } catch (err) {
+          if (!options.retryHooks) {
+            throw err;
+          }
+
+          let { currentTest } = this;
+          let retries = currentTest.retries();
+          let currentRetry = currentTest.currentRetry();
+          if (currentRetry === retries) {
+            throw err;
+          }
+
+          currentTest.currentRetry(++currentRetry);
+        }
+      }
+    }, ...args);
+  };
+}
+
 function install({ exports }, options) {
   let callerFilePath = callsites()[1].getFileName();
 
@@ -121,6 +147,15 @@ function install({ exports }, options) {
   }
 
   exports.it.allowFail = allowFail;
+
+  for (let hook of [
+    'before',
+    'beforeEach',
+    'afterEach',
+    'after'
+  ]) {
+    exports[hook] = wrapHook(hook, options);
+  }
 
   return titleGeneratorResult;
 }
