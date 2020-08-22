@@ -93,8 +93,8 @@ function skipOnError(callback) {
 // I wish mocha had "allow failures".
 // https://github.com/mochajs/mocha/issues/1480#issuecomment-487074628
 // https://github.com/mochajs/mocha/issues/2451#issuecomment-487074749
-function allowFail(title, callback) {
-  global.it(title, skipOnError(callback));
+function allowFail(title, callback, ...args) {
+  return global.it.call(this, title, skipOnError(callback), ...args);
 }
 
 function install({ exports }, options) {
