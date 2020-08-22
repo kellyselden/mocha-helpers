@@ -111,12 +111,14 @@ function install({ exports }, options) {
 
   let wrapMocha = wrapNewTitle(getFilePathTitle, options);
 
-  exports.describe = wrapMocha(global.describe);
-  exports.describe.only = wrapMocha(global.describe.only);
-  exports.describe.skip = wrapMocha(global.describe.skip);
-  exports.it = wrapMocha(global.it);
-  exports.it.only = wrapMocha(global.it.only);
-  exports.it.skip = wrapMocha(global.it.skip);
+  for (let test of [
+    'describe',
+    'it'
+  ]) {
+    exports[test] = wrapMocha(global[test]);
+    exports[test].only = wrapMocha(global[test].only);
+    exports[test].skip = wrapMocha(global[test].skip);
+  }
 
   exports.it.allowFail = allowFail;
 
