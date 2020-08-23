@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --ext js,json",
-    "test": "mocha --recursive"
+    "test": "mocha 'test/!(fixtures)/**/*-test.js'"
   },
   "repository": {
     "type": "git",
@@ -37,6 +37,7 @@
   "devDependencies": {
     "@kellyselden/node-template": "0.12.3",
     "chai": "^4.2.0",
+    "clear-module": "^4.1.1",
     "eslint": "^6.8.0",
     "eslint-config-sane": "0.8.5",
     "eslint-config-sane-node": "0.3.0",
