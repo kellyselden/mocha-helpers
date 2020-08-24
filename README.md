@@ -5,6 +5,8 @@
 
 Mocha convenience helpers
 
+## Usage
+
 Place this file somewhere in your test directory:
 
 ```js
