@@ -1,11 +1,15 @@
 'use strict';
 
-const { describe, it, runTests } = require('../helpers/mocha');
+const { describe, it, runTests, events } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const path = require('path');
+const sinon = require('sinon');
+const { Runner } = require('mocha');
 
 describe(function() {
   let grep;
+  let retryEventSpy;
+  let errorMatcher;
 
   before(function() {
     this.runTests = async options => {
@@ -17,6 +21,14 @@ describe(function() {
         }
       );
     };
+
+    retryEventSpy = sinon.spy();
+
+    events.on(Runner.constants.EVENT_TEST_RETRY, retryEventSpy);
+
+    errorMatcher = sinon.match.instanceOf(Error).and(sinon.match({
+      code: 'ERR_ASSERTION'
+    }));
   });
 
   beforeEach(function() {
@@ -25,6 +37,12 @@ describe(function() {
 
   afterEach(function() {
     delete global.FAILURE_COUNT;
+
+    retryEventSpy.resetHistory();
+  });
+
+  after(function() {
+    events.removeListener(Runner.constants.EVENT_TEST_RETRY, retryEventSpy);
   });
 
   describe('before', function() {
@@ -40,6 +58,11 @@ describe(function() {
       expect(stats.tests).to.equal(1);
       expect(stats.passes).to.equal(1);
       expect(stats.failures).to.equal(0);
+
+      expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
+        sinon.match({ title: '"before all" hook' }),
+        errorMatcher
+      );
     });
 
     it('works without errors', async function() {
@@ -52,6 +75,8 @@ describe(function() {
       expect(stats.tests).to.equal(1);
       expect(stats.passes).to.equal(1);
       expect(stats.failures).to.equal(0);
+
+      expect(retryEventSpy).to.have.not.been.called;
     });
 
     it('can still fail', async function() {
@@ -60,6 +85,8 @@ describe(function() {
       expect(stats.tests).to.equal(0);
       expect(stats.passes).to.equal(0);
       expect(stats.failures).to.equal(1);
+
+      expect(retryEventSpy).to.have.not.been.called;
     });
   });
 
@@ -76,6 +103,11 @@ describe(function() {
       expect(stats.tests).to.equal(1);
       expect(stats.passes).to.equal(1);
       expect(stats.failures).to.equal(0);
+
+      expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
+        sinon.match({ title: '"before each" hook' }),
+        errorMatcher
+      );
     });
 
     it('works without errors', async function() {
@@ -88,6 +120,8 @@ describe(function() {
       expect(stats.tests).to.equal(1);
       expect(stats.passes).to.equal(1);
       expect(stats.failures).to.equal(0);
+
+      expect(retryEventSpy).to.have.not.been.called;
     });
 
     it('can still fail', async function() {
@@ -96,6 +130,8 @@ describe(function() {
       expect(stats.tests).to.equal(0);
       expect(stats.passes).to.equal(0);
       expect(stats.failures).to.equal(1);
+
+      expect(retryEventSpy).to.have.not.been.called;
     });
   });
 
@@ -112,6 +148,11 @@ describe(function() {
       expect(stats.tests).to.equal(1);
       expect(stats.passes).to.equal(1);
       expect(stats.failures).to.equal(0);
+
+      expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
+        sinon.match({ title: '"after each" hook' }),
+        errorMatcher
+      );
     });
 
     it('works without errors', async function() {
@@ -124,6 +165,8 @@ describe(function() {
       expect(stats.tests).to.equal(1);
       expect(stats.passes).to.equal(1);
       expect(stats.failures).to.equal(0);
+
+      expect(retryEventSpy).to.have.not.been.called;
     });
 
     it('can still fail', async function() {
@@ -132,6 +175,8 @@ describe(function() {
       expect(stats.tests).to.equal(1);
       expect(stats.passes).to.equal(1);
       expect(stats.failures).to.equal(1);
+
+      expect(retryEventSpy).to.have.not.been.called;
     });
   });
 
@@ -148,6 +193,11 @@ describe(function() {
       expect(stats.tests).to.equal(1);
       expect(stats.passes).to.equal(1);
       expect(stats.failures).to.equal(0);
+
+      expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
+        sinon.match({ title: '"after all" hook' }),
+        errorMatcher
+      );
     });
 
     it('works without errors', async function() {
@@ -160,6 +210,8 @@ describe(function() {
       expect(stats.tests).to.equal(1);
       expect(stats.passes).to.equal(1);
       expect(stats.failures).to.equal(0);
+
+      expect(retryEventSpy).to.have.not.been.called;
     });
 
     it('can still fail', async function() {
@@ -168,6 +220,8 @@ describe(function() {
       expect(stats.tests).to.equal(1);
       expect(stats.passes).to.equal(1);
       expect(stats.failures).to.equal(1);
+
+      expect(retryEventSpy).to.have.not.been.called;
     });
   });
 
@@ -184,6 +238,8 @@ describe(function() {
       expect(stats.tests).to.equal(1);
       expect(stats.passes).to.equal(1);
       expect(stats.failures).to.equal(0);
+
+      expect(retryEventSpy).to.have.callCount(4);
     });
 
     it('works without errors', async function() {
@@ -196,6 +252,8 @@ describe(function() {
       expect(stats.tests).to.equal(1);
       expect(stats.passes).to.equal(1);
       expect(stats.failures).to.equal(0);
+
+      expect(retryEventSpy).to.have.not.been.called;
     });
 
     it('can still fail', async function() {
@@ -206,6 +264,8 @@ describe(function() {
       expect(stats.tests).to.equal(1);
       expect(stats.passes).to.equal(1);
       expect(stats.failures).to.equal(1);
+
+      expect(retryEventSpy).to.have.callCount(3);
     });
   });
 });
