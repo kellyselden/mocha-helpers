@@ -103,42 +103,6 @@ describe(function() {
     });
   });
 
-  describe('it', function() {
-    before(function() {
-      grep = 'it works$';
-    });
-
-    it('works', async function() {
-      let stats = await this.runTests({
-        retries: 1
-      });
-
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(0);
-    });
-
-    it('works without errors', async function() {
-      global.FAILURE_COUNT = 0;
-
-      let stats = await this.runTests({
-        retries: 1
-      });
-
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(0);
-    });
-
-    it('can still fail', async function() {
-      let stats = await this.runTests();
-
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(0);
-      expect(stats.failures).to.equal(1);
-    });
-  });
-
   describe('afterEach', function() {
     before(function() {
       grep = 'afterEach works$';
