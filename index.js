@@ -112,7 +112,7 @@ function wrapHook(hook, options) {
           let { currentTest } = this;
           let retries = currentTest.retries();
           let currentRetry = currentTest.currentRetry();
-          if (currentRetry === retries) {
+          if (retries === -1 || currentRetry === retries) {
             throw err;
           }
 
