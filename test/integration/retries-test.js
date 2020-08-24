@@ -59,9 +59,7 @@ describe(function() {
     });
 
     it('can still fail', async function() {
-      let stats = await this.runTests({
-        retries: 0
-      });
+      let stats = await this.runTests();
 
       expect(stats.tests).to.equal(0);
       expect(stats.passes).to.equal(0);
@@ -97,9 +95,7 @@ describe(function() {
     });
 
     it('can still fail', async function() {
-      let stats = await this.runTests({
-        retries: 0
-      });
+      let stats = await this.runTests();
 
       expect(stats.tests).to.equal(0);
       expect(stats.passes).to.equal(0);
@@ -135,9 +131,7 @@ describe(function() {
     });
 
     it('can still fail', async function() {
-      let stats = await this.runTests({
-        retries: 0
-      });
+      let stats = await this.runTests();
 
       expect(stats.tests).to.equal(1);
       expect(stats.passes).to.equal(0);
@@ -173,9 +167,7 @@ describe(function() {
     });
 
     it('can still fail', async function() {
-      let stats = await this.runTests({
-        retries: 0
-      });
+      let stats = await this.runTests();
 
       expect(stats.tests).to.equal(1);
       expect(stats.passes).to.equal(1);
@@ -211,9 +203,7 @@ describe(function() {
     });
 
     it('can still fail', async function() {
-      let stats = await this.runTests({
-        retries: 0
-      });
+      let stats = await this.runTests();
 
       expect(stats.tests).to.equal(1);
       expect(stats.passes).to.equal(1);
