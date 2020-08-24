@@ -1,17 +1,13 @@
 'use strict';
 
-const { describe, it, setUpRunner } = require('../helpers/mocha');
+const { describe, it, runTests } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const path = require('path');
 
 describe(function() {
   let grep;
 
-  // eslint-disable-next-line mocha/no-setup-in-describe
-  setUpRunner();
-
   before(function() {
-    let { runTests } = this;
     this.runTests = async options => {
       return await runTests(
         [path.resolve(__dirname, '../fixtures/retries-test.js')],
