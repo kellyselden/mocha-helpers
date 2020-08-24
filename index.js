@@ -4,6 +4,8 @@ const path = require('path');
 const callsites = require('callsites');
 const commondir = require('commondir');
 const titleize = require('titleize');
+const { Runner } = require('mocha');
+const EventEmitter = require('events');
 
 const titleSep = ' | ';
 
@@ -97,6 +99,8 @@ function allowFail(title, callback, ...args) {
   return global.it.call(this, title, skipOnError(callback), ...args);
 }
 
+const events = new EventEmitter();
+
 function wrapHook(hook, options) {
   return function mochaHook(callback, ...args) {
     return global[hook].call(this, async function() {
@@ -117,6 +121,8 @@ function wrapHook(hook, options) {
           }
 
           currentTest.currentRetry(++currentRetry);
+
+          events.emit(Runner.constants.EVENT_TEST_RETRY, this.test, err);
         }
       }
     }, ...args);
@@ -164,3 +170,4 @@ module.exports = install;
 module.exports.isAlreadyInMocha = isAlreadyInMocha;
 module.exports.formatTitle = formatTitle;
 module.exports.titleSeparator = titleSep;
+module.exports.events = events;

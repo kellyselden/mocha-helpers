@@ -28,3 +28,4 @@ async function runTests(files, options) {
 }
 
 module.exports.runTests = runTests;
+module.exports.events = require('../..').events;
