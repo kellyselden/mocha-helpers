@@ -46,7 +46,7 @@
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-prefer-let": "^1.0.1",
     "renovate-config-standard": "^2.0.0",
-    "sinon": "^8.0.0",
+    "sinon": "^9.0.0",
     "sinon-chai": "^3.3.0",
     "standard-node-template": "0.0.1"
   }
