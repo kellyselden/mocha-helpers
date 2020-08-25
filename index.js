@@ -62,9 +62,7 @@ function formatTitle(title) {
 }
 
 function wrapNewTitle(getFilePathTitle, options) {
-  return function wrapMocha(mocha) {
-    mocha.titleSeparator = options.titleSeparator;
-
+  return function wrapMocha(test, modifier) {
     return function newMocha(title, callback) {
       if (!callback && typeof title !== 'string') {
         callback = title;
@@ -76,6 +74,13 @@ function wrapNewTitle(getFilePathTitle, options) {
       if (!isAlreadyInMocha()) {
         title = getFilePathTitle(title);
       }
+
+      let mocha = global[test];
+      if (modifier) {
+        mocha = mocha[modifier];
+      }
+
+      mocha.titleSeparator = options.titleSeparator;
 
       return mocha.call(mocha, title, callback);
     };
@@ -156,9 +161,9 @@ function install({ exports }, options) {
     'describe',
     'it'
   ]) {
-    exports[test] = wrapMocha(global[test]);
-    exports[test].only = wrapMocha(global[test].only);
-    exports[test].skip = wrapMocha(global[test].skip);
+    exports[test] = wrapMocha(test);
+    exports[test].only = wrapMocha(test, 'only');
+    exports[test].skip = wrapMocha(test, 'skip');
   }
 
   exports.it.allowFail = allowFail;
