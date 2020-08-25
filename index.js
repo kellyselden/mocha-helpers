@@ -104,6 +104,8 @@ const events = new EventEmitter();
 function wrapHook(hook, options) {
   return function mochaHook(callback, ...args) {
     return global[hook].call(this, async function() {
+      let start = new Date();
+
       // eslint-disable-next-line no-constant-condition
       while (true) {
         try {
@@ -113,7 +115,8 @@ function wrapHook(hook, options) {
             throw err;
           }
 
-          let { currentTest } = this;
+          let { test, currentTest } = this;
+
           let retries = currentTest.retries();
           let currentRetry = currentTest.currentRetry();
           if (retries === -1 || currentRetry === retries) {
@@ -122,7 +125,13 @@ function wrapHook(hook, options) {
 
           currentTest.currentRetry(++currentRetry);
 
-          events.emit(Runner.constants.EVENT_TEST_RETRY, this.test, err);
+          events.emit(Runner.constants.EVENT_TEST_RETRY, test, err);
+
+          // test.resetTimeout();
+          // dirty hack because `resetTimeout` doesn't work the way you'd expect
+          let duration = new Date() - start;
+          let timeout = test.timeout();
+          test.timeout(duration + timeout);
         }
       }
     }, ...args);

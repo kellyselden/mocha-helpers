@@ -109,4 +109,21 @@ describe('retries', function() {
       this.attempt = 0;
     });
   });
+
+  describe('timeout', function() {
+    this.timeout(15);
+
+    before(function() {
+      this.attempt = 0;
+    });
+
+    beforeEach(async function() {
+      await new Promise(resolve => setTimeout(resolve, 10));
+      assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+    });
+
+    it('works', function() {
+      assert.ok(true);
+    });
+  });
 });

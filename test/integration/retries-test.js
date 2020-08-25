@@ -268,4 +268,36 @@ describe(function() {
       expect(retryEventSpy).to.have.callCount(3);
     });
   });
+
+  describe('timeout', function() {
+    before(function() {
+      grep = 'timeout works$';
+    });
+
+    it('resets timeout on retry', async function() {
+      let stats = await this.runTests({
+        retries: 1
+      });
+
+      expect(stats.tests).to.equal(1);
+      expect(stats.passes).to.equal(1);
+      expect(stats.failures).to.equal(0);
+
+      expect(retryEventSpy).to.have.calledOnce;
+    });
+
+    it('doesn\'t go on forever', async function() {
+      global.FAILURE_COUNT = 2;
+
+      let stats = await this.runTests({
+        retries: 1
+      });
+
+      expect(stats.tests).to.equal(0);
+      expect(stats.passes).to.equal(0);
+      expect(stats.failures).to.equal(1);
+
+      expect(retryEventSpy).to.have.calledOnce;
+    });
+  });
 });
