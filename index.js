@@ -106,40 +106,42 @@ function allowFail(title, callback, ...args) {
 
 const events = new EventEmitter();
 
-function wrapHook(hook, options) {
-  return function mochaHook(callback, ...args) {
-    return global[hook].call(this, async function() {
-      let start = new Date();
+function wrapRetries(options) {
+  return function wrapHook(hook) {
+    return function mochaHook(callback, ...args) {
+      return global[hook].call(this, async function() {
+        let start = new Date();
 
-      // eslint-disable-next-line no-constant-condition
-      while (true) {
-        try {
-          return await callback.call(this, arguments);
-        } catch (err) {
-          if (!options.retryHooks) {
-            throw err;
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+          try {
+            return await callback.call(this, arguments);
+          } catch (err) {
+            if (!options.retryHooks) {
+              throw err;
+            }
+
+            let { test, currentTest } = this;
+
+            let retries = currentTest.retries();
+            let currentRetry = currentTest.currentRetry();
+            if (retries === -1 || currentRetry === retries) {
+              throw err;
+            }
+
+            currentTest.currentRetry(++currentRetry);
+
+            events.emit(Runner.constants.EVENT_TEST_RETRY, test, err);
+
+            // test.resetTimeout();
+            // dirty hack because `resetTimeout` doesn't work the way you'd expect
+            let duration = new Date() - start;
+            let timeout = test.timeout();
+            test.timeout(duration + timeout);
           }
-
-          let { test, currentTest } = this;
-
-          let retries = currentTest.retries();
-          let currentRetry = currentTest.currentRetry();
-          if (retries === -1 || currentRetry === retries) {
-            throw err;
-          }
-
-          currentTest.currentRetry(++currentRetry);
-
-          events.emit(Runner.constants.EVENT_TEST_RETRY, test, err);
-
-          // test.resetTimeout();
-          // dirty hack because `resetTimeout` doesn't work the way you'd expect
-          let duration = new Date() - start;
-          let timeout = test.timeout();
-          test.timeout(duration + timeout);
         }
-      }
-    }, ...args);
+      }, ...args);
+    };
   };
 }
 
@@ -168,13 +170,15 @@ function install({ exports }, options) {
 
   exports.it.allowFail = allowFail;
 
+  let wrapHook = wrapRetries(options);
+
   for (let hook of [
     'before',
     'beforeEach',
     'afterEach',
     'after'
   ]) {
-    exports[hook] = wrapHook(hook, options);
+    exports[hook] = wrapHook(hook);
   }
 
   return titleGeneratorResult;
