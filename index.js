@@ -6,8 +6,9 @@ const commondir = require('commondir');
 const titleize = require('titleize');
 const Mocha = require('mocha');
 const EventEmitter = require('events');
+const { promisify } = require('util');
 
-const { Runner } = Mocha;
+const { Runner, Test } = Mocha;
 
 const titleSep = ' | ';
 
@@ -114,33 +115,111 @@ function wrapRetries(options) {
       return Mocha[hook].call(this, async function() {
         let start = new Date();
 
-        // eslint-disable-next-line no-constant-condition
-        while (true) {
-          try {
-            return await callback.call(this, arguments);
-          } catch (err) {
-            if (!options.retryHooks) {
-              throw err;
-            }
+        let { test, currentTest } = this;
+        let { callback: testCallback, _timeoutError } = test;
 
-            let { test, currentTest } = this;
+        // `Runnable` keeps the original test start time in private scope
+        // and tries to detect a timeout on test finish based on
+        // what it thinks the duration is. So we have to extend the
+        // duration calculation based on any timed out retries.
+        let timeoutOffset = 0;
 
-            let retries = currentTest.retries();
-            let currentRetry = currentTest.currentRetry();
-            if (retries === -1 || currentRetry === retries) {
-              throw err;
-            }
+        function isFinalRetry(currentRetry) {
+          let retries = currentTest.retries();
+          return retries === -1 || currentRetry === retries;
+        }
 
-            currentTest.currentRetry(++currentRetry);
-
-            events.emit(Runner.constants.EVENT_TEST_RETRY, test, err);
-
-            // test.resetTimeout();
-            // dirty hack because `resetTimeout` doesn't work the way you'd expect
-            let duration = new Date() - start;
-            let timeout = test.timeout();
-            test.timeout(duration + timeout);
+        function shouldRetry() {
+          if (!options.retryHooks) {
+            return false;
           }
+
+          if (test.timedOut) {
+            return false;
+          }
+
+          let currentRetry = currentTest.currentRetry();
+          if (isFinalRetry(currentRetry)) {
+            return false;
+          }
+
+          return true;
+        }
+
+        function clone(hook) {
+          hook.retriedTest = () => {};
+          let clone = Test.prototype.clone.call(hook);
+          delete hook.retriedTest;
+          clone.type = hook.type;
+          return clone;
+        }
+
+        function setUpRetryAndClone(err) {
+          let currentRetry = currentTest.currentRetry();
+          currentTest.currentRetry(++currentRetry);
+
+          events.emit(Runner.constants.EVENT_TEST_RETRY, test, err);
+
+          // test.resetTimeout();
+          // dirty hack because `resetTimeout` doesn't work the way you'd expect
+          timeoutOffset = new Date() - start;
+
+          let _clone = clone(test);
+
+          return _clone;
+        }
+
+        function resetOverrides() {
+          test.callback = testCallback;
+          test._timeoutError = _timeoutError;
+        }
+
+        test._timeoutError = function(ms) {
+          let isCalledFromSetTimeout = test.duration === undefined;
+          if (isCalledFromSetTimeout || test.duration - timeoutOffset > ms) {
+            return _timeoutError.apply(this, arguments);
+          }
+        };
+
+        test.callback = function(err) {
+          if (!shouldRetry()) {
+            resetOverrides();
+
+            return testCallback.apply(this, arguments);
+          }
+
+          let clone = setUpRetryAndClone(err);
+
+          clone.run(function() {
+            // The original test that timed out needs to be reset
+            // so it can properly finish.
+            test.timedOut = false;
+
+            let returnValue = testCallback.apply(this, arguments);
+
+            // Then mark it timed out again. In case the original
+            // timed out hook ever completes, we want it to early exit
+            // in its callback.
+            test.timedOut = true;
+
+            return returnValue;
+          });
+        };
+
+        try {
+          return await callback.call(this, arguments);
+        } catch (err) {
+          if (!shouldRetry()) {
+            throw err;
+          }
+
+          test.clearTimeout();
+
+          let clone = setUpRetryAndClone(err);
+
+          let run = promisify(clone.run.bind(clone));
+
+          await run();
         }
       }, ...args);
     };
