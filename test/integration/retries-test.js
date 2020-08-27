@@ -283,7 +283,7 @@ describe(function() {
       expect(stats.passes).to.equal(1);
       expect(stats.failures).to.equal(0);
 
-      expect(retryEventSpy).to.have.calledOnce;
+      expect(retryEventSpy).to.have.been.calledOnce;
     });
 
     it('doesn\'t go on forever', async function() {
@@ -297,7 +297,7 @@ describe(function() {
       expect(stats.passes).to.equal(0);
       expect(stats.failures).to.equal(1);
 
-      expect(retryEventSpy).to.have.calledOnce;
+      expect(retryEventSpy).to.have.been.calledOnce;
     });
   });
 });
