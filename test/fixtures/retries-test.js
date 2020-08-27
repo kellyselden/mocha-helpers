@@ -41,16 +41,6 @@ describe('retries', function() {
     });
   });
 
-  describe('it', function() {
-    before(function() {
-      this.attempt = 0;
-    });
-
-    it('works', function() {
-      assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
-    });
-  });
-
   describe('afterEach', function() {
     before(function() {
       this.attempt = 0;
