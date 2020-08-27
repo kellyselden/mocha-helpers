@@ -46,259 +46,261 @@ describe(function() {
     events.removeListener(Runner.constants.EVENT_TEST_RETRY, retryEventSpy);
   });
 
-  describe('before', function() {
-    before(function() {
-      grep = 'before works$';
-    });
-
-    it('works', async function() {
-      let stats = await this.runTests({
-        retries: 1
+  describe('errors', function() {
+    describe('before', function() {
+      before(function() {
+        grep = 'errors before works$';
       });
 
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(0);
+      it('works', async function() {
+        let stats = await this.runTests({
+          retries: 1
+        });
 
-      expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
-        sinon.match({ title: '"before all" hook' }),
-        errorMatcher
-      );
-    });
+        expect(stats.tests).to.equal(1);
+        expect(stats.passes).to.equal(1);
+        expect(stats.failures).to.equal(0);
 
-    it('works without errors', async function() {
-      global.FAILURE_COUNT = 0;
-
-      let stats = await this.runTests({
-        retries: 1
+        expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
+          sinon.match({ title: '"before all" hook' }),
+          errorMatcher
+        );
       });
 
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(0);
+      it('works without errors', async function() {
+        global.FAILURE_COUNT = 0;
 
-      expect(retryEventSpy).to.have.not.been.called;
-    });
+        let stats = await this.runTests({
+          retries: 1
+        });
 
-    it('can still fail', async function() {
-      let stats = await this.runTests();
+        expect(stats.tests).to.equal(1);
+        expect(stats.passes).to.equal(1);
+        expect(stats.failures).to.equal(0);
 
-      expect(stats.tests).to.equal(0);
-      expect(stats.passes).to.equal(0);
-      expect(stats.failures).to.equal(1);
-
-      expect(retryEventSpy).to.have.not.been.called;
-    });
-  });
-
-  describe('beforeEach', function() {
-    before(function() {
-      grep = 'beforeEach works$';
-    });
-
-    it('works', async function() {
-      let stats = await this.runTests({
-        retries: 1
+        expect(retryEventSpy).to.have.not.been.called;
       });
 
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(0);
+      it('can still fail', async function() {
+        let stats = await this.runTests();
 
-      expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
-        sinon.match({ title: '"before each" hook' }),
-        errorMatcher
-      );
+        expect(stats.tests).to.equal(0);
+        expect(stats.passes).to.equal(0);
+        expect(stats.failures).to.equal(1);
+
+        expect(retryEventSpy).to.have.not.been.called;
+      });
     });
 
-    it('works without errors', async function() {
-      global.FAILURE_COUNT = 0;
-
-      let stats = await this.runTests({
-        retries: 1
+    describe('beforeEach', function() {
+      before(function() {
+        grep = 'errors beforeEach works$';
       });
 
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(0);
+      it('works', async function() {
+        let stats = await this.runTests({
+          retries: 1
+        });
 
-      expect(retryEventSpy).to.have.not.been.called;
-    });
+        expect(stats.tests).to.equal(1);
+        expect(stats.passes).to.equal(1);
+        expect(stats.failures).to.equal(0);
 
-    it('can still fail', async function() {
-      let stats = await this.runTests();
-
-      expect(stats.tests).to.equal(0);
-      expect(stats.passes).to.equal(0);
-      expect(stats.failures).to.equal(1);
-
-      expect(retryEventSpy).to.have.not.been.called;
-    });
-  });
-
-  describe('afterEach', function() {
-    before(function() {
-      grep = 'afterEach works$';
-    });
-
-    it('works', async function() {
-      let stats = await this.runTests({
-        retries: 1
+        expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
+          sinon.match({ title: '"before each" hook' }),
+          errorMatcher
+        );
       });
 
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(0);
+      it('works without errors', async function() {
+        global.FAILURE_COUNT = 0;
 
-      expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
-        sinon.match({ title: '"after each" hook' }),
-        errorMatcher
-      );
-    });
+        let stats = await this.runTests({
+          retries: 1
+        });
 
-    it('works without errors', async function() {
-      global.FAILURE_COUNT = 0;
+        expect(stats.tests).to.equal(1);
+        expect(stats.passes).to.equal(1);
+        expect(stats.failures).to.equal(0);
 
-      let stats = await this.runTests({
-        retries: 1
+        expect(retryEventSpy).to.have.not.been.called;
       });
 
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(0);
+      it('can still fail', async function() {
+        let stats = await this.runTests();
 
-      expect(retryEventSpy).to.have.not.been.called;
+        expect(stats.tests).to.equal(0);
+        expect(stats.passes).to.equal(0);
+        expect(stats.failures).to.equal(1);
+
+        expect(retryEventSpy).to.have.not.been.called;
+      });
     });
 
-    it('can still fail', async function() {
-      let stats = await this.runTests();
-
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(1);
-
-      expect(retryEventSpy).to.have.not.been.called;
-    });
-  });
-
-  describe('after', function() {
-    before(function() {
-      grep = 'after works$';
-    });
-
-    it('works', async function() {
-      let stats = await this.runTests({
-        retries: 1
+    describe('afterEach', function() {
+      before(function() {
+        grep = 'errors afterEach works$';
       });
 
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(0);
+      it('works', async function() {
+        let stats = await this.runTests({
+          retries: 1
+        });
 
-      expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
-        sinon.match({ title: '"after all" hook' }),
-        errorMatcher
-      );
-    });
+        expect(stats.tests).to.equal(1);
+        expect(stats.passes).to.equal(1);
+        expect(stats.failures).to.equal(0);
 
-    it('works without errors', async function() {
-      global.FAILURE_COUNT = 0;
-
-      let stats = await this.runTests({
-        retries: 1
+        expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
+          sinon.match({ title: '"after each" hook' }),
+          errorMatcher
+        );
       });
 
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(0);
+      it('works without errors', async function() {
+        global.FAILURE_COUNT = 0;
 
-      expect(retryEventSpy).to.have.not.been.called;
-    });
+        let stats = await this.runTests({
+          retries: 1
+        });
 
-    it('can still fail', async function() {
-      let stats = await this.runTests();
+        expect(stats.tests).to.equal(1);
+        expect(stats.passes).to.equal(1);
+        expect(stats.failures).to.equal(0);
 
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(1);
-
-      expect(retryEventSpy).to.have.not.been.called;
-    });
-  });
-
-  describe('multiple errors in different hooks', function() {
-    before(function() {
-      grep = 'multiple works$';
-    });
-
-    it('works', async function() {
-      let stats = await this.runTests({
-        retries: 4
+        expect(retryEventSpy).to.have.not.been.called;
       });
 
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(0);
+      it('can still fail', async function() {
+        let stats = await this.runTests();
 
-      expect(retryEventSpy).to.have.callCount(4);
+        expect(stats.tests).to.equal(1);
+        expect(stats.passes).to.equal(1);
+        expect(stats.failures).to.equal(1);
+
+        expect(retryEventSpy).to.have.not.been.called;
+      });
     });
 
-    it('works without errors', async function() {
-      global.FAILURE_COUNT = 0;
-
-      let stats = await this.runTests({
-        retries: 4
+    describe('after', function() {
+      before(function() {
+        grep = 'errors after works$';
       });
 
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(0);
+      it('works', async function() {
+        let stats = await this.runTests({
+          retries: 1
+        });
 
-      expect(retryEventSpy).to.have.not.been.called;
-    });
+        expect(stats.tests).to.equal(1);
+        expect(stats.passes).to.equal(1);
+        expect(stats.failures).to.equal(0);
 
-    it('can still fail', async function() {
-      let stats = await this.runTests({
-        retries: 3
+        expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
+          sinon.match({ title: '"after all" hook' }),
+          errorMatcher
+        );
       });
 
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(1);
+      it('works without errors', async function() {
+        global.FAILURE_COUNT = 0;
 
-      expect(retryEventSpy).to.have.callCount(3);
-    });
-  });
+        let stats = await this.runTests({
+          retries: 1
+        });
 
-  describe('timeout', function() {
-    before(function() {
-      grep = 'timeout works$';
-    });
+        expect(stats.tests).to.equal(1);
+        expect(stats.passes).to.equal(1);
+        expect(stats.failures).to.equal(0);
 
-    it('resets timeout on retry', async function() {
-      let stats = await this.runTests({
-        retries: 1
+        expect(retryEventSpy).to.have.not.been.called;
       });
 
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(0);
+      it('can still fail', async function() {
+        let stats = await this.runTests();
 
-      expect(retryEventSpy).to.have.been.calledOnce;
+        expect(stats.tests).to.equal(1);
+        expect(stats.passes).to.equal(1);
+        expect(stats.failures).to.equal(1);
+
+        expect(retryEventSpy).to.have.not.been.called;
+      });
     });
 
-    it('doesn\'t go on forever', async function() {
-      global.FAILURE_COUNT = 2;
-
-      let stats = await this.runTests({
-        retries: 1
+    describe('multiple errors in different hooks', function() {
+      before(function() {
+        grep = 'errors multiple works$';
       });
 
-      expect(stats.tests).to.equal(0);
-      expect(stats.passes).to.equal(0);
-      expect(stats.failures).to.equal(1);
+      it('works', async function() {
+        let stats = await this.runTests({
+          retries: 4
+        });
 
-      expect(retryEventSpy).to.have.been.calledOnce;
+        expect(stats.tests).to.equal(1);
+        expect(stats.passes).to.equal(1);
+        expect(stats.failures).to.equal(0);
+
+        expect(retryEventSpy).to.have.callCount(4);
+      });
+
+      it('works without errors', async function() {
+        global.FAILURE_COUNT = 0;
+
+        let stats = await this.runTests({
+          retries: 4
+        });
+
+        expect(stats.tests).to.equal(1);
+        expect(stats.passes).to.equal(1);
+        expect(stats.failures).to.equal(0);
+
+        expect(retryEventSpy).to.have.not.been.called;
+      });
+
+      it('can still fail', async function() {
+        let stats = await this.runTests({
+          retries: 3
+        });
+
+        expect(stats.tests).to.equal(1);
+        expect(stats.passes).to.equal(1);
+        expect(stats.failures).to.equal(1);
+
+        expect(retryEventSpy).to.have.callCount(3);
+      });
+    });
+
+    describe('timeout', function() {
+      before(function() {
+        grep = 'errors timeout works$';
+      });
+
+      it('resets timeout on retry', async function() {
+        let stats = await this.runTests({
+          retries: 1
+        });
+
+        expect(stats.tests).to.equal(1);
+        expect(stats.passes).to.equal(1);
+        expect(stats.failures).to.equal(0);
+
+        expect(retryEventSpy).to.have.been.calledOnce;
+      });
+
+      it('doesn\'t go on forever', async function() {
+        global.FAILURE_COUNT = 2;
+
+        let stats = await this.runTests({
+          retries: 1
+        });
+
+        expect(stats.tests).to.equal(0);
+        expect(stats.passes).to.equal(0);
+        expect(stats.failures).to.equal(1);
+
+        expect(retryEventSpy).to.have.been.calledOnce;
+      });
     });
   });
 });
