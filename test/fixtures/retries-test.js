@@ -12,106 +12,108 @@ const { before, beforeEach, afterEach, after } = mocha.exports;
 const assert = require('assert');
 
 describe('retries', function() {
-  describe('before', function() {
-    before(function() {
-      this.attempt = 0;
+  describe('errors', function() {
+    describe('before', function() {
+      before(function() {
+        this.attempt = 0;
+      });
+
+      before(function() {
+        assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+      });
+
+      it('works', function() {
+        assert.ok(true);
+      });
     });
 
-    before(function() {
-      assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+    describe('beforeEach', function() {
+      before(function() {
+        this.attempt = 0;
+      });
+
+      beforeEach(function() {
+        assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+      });
+
+      it('works', function() {
+        assert.ok(true);
+      });
     });
 
-    it('works', function() {
-      assert.ok(true);
-    });
-  });
+    describe('afterEach', function() {
+      before(function() {
+        this.attempt = 0;
+      });
 
-  describe('beforeEach', function() {
-    before(function() {
-      this.attempt = 0;
-    });
+      afterEach(function() {
+        assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+      });
 
-    beforeEach(function() {
-      assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
-    });
-
-    it('works', function() {
-      assert.ok(true);
-    });
-  });
-
-  describe('afterEach', function() {
-    before(function() {
-      this.attempt = 0;
+      it('works', function() {
+        assert.ok(true);
+      });
     });
 
-    afterEach(function() {
-      assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+    describe('after', function() {
+      before(function() {
+        this.attempt = 0;
+      });
+
+      after(function() {
+        assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+      });
+
+      it('works', function() {
+        assert.ok(true);
+      });
     });
 
-    it('works', function() {
-      assert.ok(true);
-    });
-  });
+    describe('multiple', function() {
+      before(function() {
+        this.attempt = 0;
+      });
 
-  describe('after', function() {
-    before(function() {
-      this.attempt = 0;
-    });
+      before(function() {
+        assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+        this.attempt = 0;
+      });
 
-    after(function() {
-      assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
-    });
+      beforeEach(function() {
+        assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+        this.attempt = 0;
+      });
 
-    it('works', function() {
-      assert.ok(true);
-    });
-  });
+      it('works', function() {
+        assert.ok(true);
+      });
 
-  describe('multiple', function() {
-    before(function() {
-      this.attempt = 0;
-    });
+      afterEach(function() {
+        assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+        this.attempt = 0;
+      });
 
-    before(function() {
-      assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
-      this.attempt = 0;
-    });
-
-    beforeEach(function() {
-      assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
-      this.attempt = 0;
+      after(function() {
+        assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+        this.attempt = 0;
+      });
     });
 
-    it('works', function() {
-      assert.ok(true);
-    });
+    describe('timeout', function() {
+      this.timeout(15);
 
-    afterEach(function() {
-      assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
-      this.attempt = 0;
-    });
+      before(function() {
+        this.attempt = 0;
+      });
 
-    after(function() {
-      assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
-      this.attempt = 0;
-    });
-  });
+      beforeEach(async function() {
+        await new Promise(resolve => setTimeout(resolve, 10));
+        assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+      });
 
-  describe('timeout', function() {
-    this.timeout(15);
-
-    before(function() {
-      this.attempt = 0;
-    });
-
-    beforeEach(async function() {
-      await new Promise(resolve => setTimeout(resolve, 10));
-      assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
-    });
-
-    it('works', function() {
-      assert.ok(true);
+      it('works', function() {
+        assert.ok(true);
+      });
     });
   });
 });
