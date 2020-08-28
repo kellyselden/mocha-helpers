@@ -237,8 +237,13 @@ describe(function() {
       });
 
       it('works', async function() {
+        global.BEFORE_FAILURE_COUNT = 1;
+        global.BEFORE_EACH_FAILURE_COUNT = 1;
+        global.AFTER_EACH_FAILURE_COUNT = 1;
+        global.AFTER_FAILURE_COUNT = 1;
+
         let stats = await this.runTests({
-          retries: 4
+          retries: 1
         });
 
         expect(stats.tests).to.equal(1);
@@ -249,10 +254,13 @@ describe(function() {
       });
 
       it('works without errors', async function() {
-        global.FAILURE_COUNT = 0;
+        global.BEFORE_FAILURE_COUNT = 0;
+        global.BEFORE_EACH_FAILURE_COUNT = 0;
+        global.AFTER_EACH_FAILURE_COUNT = 0;
+        global.AFTER_FAILURE_COUNT = 0;
 
         let stats = await this.runTests({
-          retries: 4
+          retries: 1
         });
 
         expect(stats.tests).to.equal(1);
@@ -263,15 +271,20 @@ describe(function() {
       });
 
       it('can still fail', async function() {
+        global.BEFORE_FAILURE_COUNT = 1;
+        global.BEFORE_EACH_FAILURE_COUNT = 1;
+        global.AFTER_EACH_FAILURE_COUNT = 1;
+        global.AFTER_FAILURE_COUNT = 2;
+
         let stats = await this.runTests({
-          retries: 3
+          retries: 1
         });
 
         expect(stats.tests).to.equal(1);
         expect(stats.passes).to.equal(1);
         expect(stats.failures).to.equal(1);
 
-        expect(retryEventSpy).to.have.callCount(3);
+        expect(retryEventSpy).to.have.callCount(4);
       });
     });
   });
@@ -463,8 +476,13 @@ describe(function() {
       });
 
       it('works', async function() {
+        global.BEFORE_FAILURE_COUNT = 1;
+        global.BEFORE_EACH_FAILURE_COUNT = 1;
+        global.AFTER_EACH_FAILURE_COUNT = 1;
+        global.AFTER_FAILURE_COUNT = 1;
+
         let stats = await this.runTests({
-          retries: 4
+          retries: 1
         });
 
         expect(stats.tests).to.equal(1);
@@ -475,10 +493,13 @@ describe(function() {
       });
 
       it('works without errors', async function() {
-        global.FAILURE_COUNT = 0;
+        global.BEFORE_FAILURE_COUNT = 0;
+        global.BEFORE_EACH_FAILURE_COUNT = 0;
+        global.AFTER_EACH_FAILURE_COUNT = 0;
+        global.AFTER_FAILURE_COUNT = 0;
 
         let stats = await this.runTests({
-          retries: 4
+          retries: 1
         });
 
         expect(stats.tests).to.equal(1);
@@ -489,15 +510,20 @@ describe(function() {
       });
 
       it('can still fail', async function() {
+        global.BEFORE_FAILURE_COUNT = 1;
+        global.BEFORE_EACH_FAILURE_COUNT = 1;
+        global.AFTER_EACH_FAILURE_COUNT = 1;
+        global.AFTER_FAILURE_COUNT = 2;
+
         let stats = await this.runTests({
-          retries: 3
+          retries: 1
         });
 
         expect(stats.tests).to.equal(1);
         expect(stats.passes).to.equal(1);
         expect(stats.failures).to.equal(1);
 
-        expect(retryEventSpy).to.have.callCount(3);
+        expect(retryEventSpy).to.have.callCount(4);
       });
     });
   });
@@ -566,6 +592,23 @@ describe(function() {
 
       expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
         sinon.match({ title: '"before each" hook for "works"' }),
+        errorMatcher
+      );
+    });
+
+    it('missing currentTest', async function() {
+      grep = 'errors and timeouts missing currentTest describe works$';
+
+      let stats = await this.runTests({
+        retries: 1
+      });
+
+      expect(stats.tests).to.equal(1);
+      expect(stats.passes).to.equal(1);
+      expect(stats.failures).to.equal(0);
+
+      expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
+        sinon.match({ title: '"before all" hook' }),
         errorMatcher
       );
     });

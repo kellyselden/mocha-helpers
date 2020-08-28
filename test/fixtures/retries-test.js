@@ -75,12 +75,12 @@ describe('retries', function() {
       });
 
       before(function() {
-        assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+        assert.strictEqual(this.attempt++, global.BEFORE_FAILURE_COUNT);
         this.attempt = 0;
       });
 
       beforeEach(function() {
-        assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+        assert.strictEqual(this.attempt++, global.BEFORE_EACH_FAILURE_COUNT);
         this.attempt = 0;
       });
 
@@ -89,12 +89,12 @@ describe('retries', function() {
       });
 
       afterEach(function() {
-        assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+        assert.strictEqual(this.attempt++, global.AFTER_EACH_FAILURE_COUNT);
         this.attempt = 0;
       });
 
       after(function() {
-        assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+        assert.strictEqual(this.attempt++, global.AFTER_FAILURE_COUNT);
         this.attempt = 0;
       });
     });
@@ -178,7 +178,7 @@ describe('retries', function() {
       });
 
       before(async function() {
-        if (this.attempt++ < global.FAILURE_COUNT) {
+        if (this.attempt++ < global.BEFORE_FAILURE_COUNT) {
           await new Promise(resolve => setTimeout(resolve, 15));
         } else {
           this.attempt = 0;
@@ -186,7 +186,7 @@ describe('retries', function() {
       });
 
       beforeEach(async function() {
-        if (this.attempt++ < global.FAILURE_COUNT) {
+        if (this.attempt++ < global.BEFORE_EACH_FAILURE_COUNT) {
           await new Promise(resolve => setTimeout(resolve, 15));
         } else {
           this.attempt = 0;
@@ -198,7 +198,7 @@ describe('retries', function() {
       });
 
       afterEach(async function() {
-        if (this.attempt++ < global.FAILURE_COUNT) {
+        if (this.attempt++ < global.AFTER_EACH_FAILURE_COUNT) {
           await new Promise(resolve => setTimeout(resolve, 15));
         } else {
           this.attempt = 0;
@@ -206,7 +206,7 @@ describe('retries', function() {
       });
 
       after(async function() {
-        if (this.attempt++ < global.FAILURE_COUNT) {
+        if (this.attempt++ < global.AFTER_FAILURE_COUNT) {
           await new Promise(resolve => setTimeout(resolve, 15));
         } else {
           this.attempt = 0;
@@ -267,6 +267,22 @@ describe('retries', function() {
       });
 
       it('works', function() {});
+    });
+
+    describe('missing currentTest', function() {
+      before(function() {
+        this.attempt = 0;
+      });
+
+      before(function() {
+        assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
+      });
+
+      describe('describe', function() {
+        it('works', function() {
+          assert.ok(true);
+        });
+      });
     });
   });
 });
