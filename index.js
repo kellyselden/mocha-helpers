@@ -115,7 +115,7 @@ function wrapRetries(options) {
       return Mocha[hook].call(this, async function() {
         let start = new Date();
 
-        let { test, currentTest } = this;
+        let { test } = this;
         let { callback: testCallback, _timeoutError } = test;
 
         // `Runnable` keeps the original test start time in private scope
@@ -125,7 +125,7 @@ function wrapRetries(options) {
         let timeoutOffset = 0;
 
         function isFinalRetry(currentRetry) {
-          let retries = currentTest.retries();
+          let retries = test.retries();
           return retries === -1 || currentRetry === retries;
         }
 
@@ -138,7 +138,7 @@ function wrapRetries(options) {
             return false;
           }
 
-          let currentRetry = currentTest.currentRetry();
+          let currentRetry = test.currentRetry();
           if (isFinalRetry(currentRetry)) {
             return false;
           }
@@ -155,8 +155,8 @@ function wrapRetries(options) {
         }
 
         function setUpRetryAndClone(err) {
-          let currentRetry = currentTest.currentRetry();
-          currentTest.currentRetry(++currentRetry);
+          let currentRetry = test.currentRetry();
+          test.currentRetry(++currentRetry);
 
           events.emit(Runner.constants.EVENT_TEST_RETRY, test, err);
 
