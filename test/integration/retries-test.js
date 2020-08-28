@@ -1,6 +1,6 @@
 'use strict';
 
-const { describe, it, runTests, events } = require('../helpers/mocha');
+const { describe, it, runTests, setUpObjectReset, events } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const path = require('path');
 const sinon = require('sinon');
@@ -10,6 +10,9 @@ describe(function() {
   let grep;
   let retryEventSpy;
   let errorMatcher;
+
+  // eslint-disable-next-line mocha/no-setup-in-describe
+  setUpObjectReset(global);
 
   before(function() {
     this.runTests = async options => {
@@ -36,8 +39,6 @@ describe(function() {
   });
 
   afterEach(function() {
-    delete global.FAILURE_COUNT;
-
     retryEventSpy.resetHistory();
   });
 

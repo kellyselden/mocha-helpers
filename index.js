@@ -147,6 +147,26 @@ function wrapRetries(options) {
   };
 }
 
+function setUpObjectReset(obj) {
+  let original;
+  let list;
+
+  Mocha.before(function() {
+    original = { ...obj };
+    list = Object.getOwnPropertyNames(obj);
+  });
+
+  Mocha.afterEach(function() {
+    for (let k of Object.getOwnPropertyNames(obj)) {
+      if (!list.includes(k)) {
+        delete obj[k];
+      } else if (original[k] !== obj[k]) {
+        original[k] = obj[k];
+      }
+    }
+  });
+}
+
 function install({ exports }, options) {
   let callerFilePath = callsites()[1].getFileName();
 
@@ -182,6 +202,10 @@ function install({ exports }, options) {
   ]) {
     exports[hook] = wrapHook(hook);
   }
+
+  Object.assign(exports, {
+    setUpObjectReset
+  });
 
   return titleGeneratorResult;
 }
