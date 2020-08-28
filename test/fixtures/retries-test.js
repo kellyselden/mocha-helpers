@@ -17,7 +17,6 @@ describe('retries', function() {
       this.attempt = 0;
     });
 
-    // eslint-disable-next-line mocha/no-sibling-hooks
     before(function() {
       assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
     });
@@ -74,7 +73,6 @@ describe('retries', function() {
       this.attempt = 0;
     });
 
-    // eslint-disable-next-line mocha/no-sibling-hooks
     before(function() {
       assert.strictEqual(this.attempt++, global.FAILURE_COUNT);
       this.attempt = 0;
