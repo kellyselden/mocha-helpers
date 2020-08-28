@@ -4,8 +4,10 @@ const path = require('path');
 const callsites = require('callsites');
 const commondir = require('commondir');
 const titleize = require('titleize');
-const { Runner } = require('mocha');
+const Mocha = require('mocha');
 const EventEmitter = require('events');
+
+const { Runner } = Mocha;
 
 const titleSep = ' | ';
 
@@ -75,7 +77,7 @@ function wrapNewTitle(getFilePathTitle, options) {
         title = getFilePathTitle(title);
       }
 
-      let mocha = global[test];
+      let mocha = Mocha[test];
       if (modifier) {
         mocha = mocha[modifier];
       }
@@ -101,7 +103,7 @@ function skipOnError(callback) {
 // https://github.com/mochajs/mocha/issues/1480#issuecomment-487074628
 // https://github.com/mochajs/mocha/issues/2451#issuecomment-487074749
 function allowFail(title, callback, ...args) {
-  return global.it.call(this, title, skipOnError(callback), ...args);
+  return Mocha.it.call(this, title, skipOnError(callback), ...args);
 }
 
 const events = new EventEmitter();
@@ -109,7 +111,7 @@ const events = new EventEmitter();
 function wrapRetries(options) {
   return function wrapHook(hook) {
     return function mochaHook(callback, ...args) {
-      return global[hook].call(this, async function() {
+      return Mocha[hook].call(this, async function() {
         let start = new Date();
 
         // eslint-disable-next-line no-constant-condition
