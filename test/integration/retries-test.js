@@ -226,7 +226,7 @@ describe(function() {
     });
   });
 
-  describe('muultiple errors in different hooks', function() {
+  describe('multiple errors in different hooks', function() {
     before(function() {
       grep = 'multiple works$';
     });
