@@ -294,5 +294,6 @@ Object.assign(module.exports, {
   isAlreadyInMocha,
   formatTitle,
   titleSeparator: titleSep,
-  events
+  events,
+  setUpObjectReset
 });
