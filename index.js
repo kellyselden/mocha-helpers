@@ -290,7 +290,9 @@ function install({ exports }, options) {
 }
 
 module.exports = install;
-module.exports.isAlreadyInMocha = isAlreadyInMocha;
-module.exports.formatTitle = formatTitle;
-module.exports.titleSeparator = titleSep;
-module.exports.events = events;
+Object.assign(module.exports, {
+  isAlreadyInMocha,
+  formatTitle,
+  titleSeparator: titleSep,
+  events
+});
