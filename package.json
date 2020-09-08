@@ -27,7 +27,7 @@
     "index.js"
   ],
   "engines": {
-    "node": ">=8.3"
+    "node": ">=10.12"
   },
   "dependencies": {
     "callsites": "^3.0.0",
