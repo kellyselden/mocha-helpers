@@ -66,7 +66,7 @@ describe(function() {
         expect(stats.failures).to.equal(0);
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
-          sinon.match({ title: '"before all" hook' }),
+          sinon.match({ title: '"before all" hook in "before"' }),
           errorMatcher
         );
       });
@@ -111,7 +111,7 @@ describe(function() {
         expect(stats.failures).to.equal(0);
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
-          sinon.match({ title: '"before each" hook' }),
+          sinon.match({ title: '"before each" hook in "beforeEach"' }),
           errorMatcher
         );
       });
@@ -156,7 +156,7 @@ describe(function() {
         expect(stats.failures).to.equal(0);
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
-          sinon.match({ title: '"after each" hook' }),
+          sinon.match({ title: '"after each" hook in "afterEach"' }),
           errorMatcher
         );
       });
@@ -201,7 +201,7 @@ describe(function() {
         expect(stats.failures).to.equal(0);
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
-          sinon.match({ title: '"after all" hook' }),
+          sinon.match({ title: '"after all" hook in "after"' }),
           errorMatcher
         );
       });
@@ -305,7 +305,7 @@ describe(function() {
         expect(stats.failures).to.equal(0);
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
-          sinon.match({ title: '"before all" hook' }),
+          sinon.match({ title: '"before all" hook in "before"' }),
           timeoutMatcher
         );
       });
@@ -350,7 +350,7 @@ describe(function() {
         expect(stats.failures).to.equal(0);
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
-          sinon.match({ title: '"before each" hook' }),
+          sinon.match({ title: '"before each" hook in "beforeEach"' }),
           timeoutMatcher
         );
       });
@@ -395,7 +395,7 @@ describe(function() {
         expect(stats.failures).to.equal(0);
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
-          sinon.match({ title: '"after each" hook' }),
+          sinon.match({ title: '"after each" hook in "afterEach"' }),
           timeoutMatcher
         );
       });
@@ -440,7 +440,7 @@ describe(function() {
         expect(stats.failures).to.equal(0);
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
-          sinon.match({ title: '"after all" hook' }),
+          sinon.match({ title: '"after all" hook in "after"' }),
           timeoutMatcher
         );
       });
@@ -541,7 +541,7 @@ describe(function() {
       expect(stats.failures).to.equal(0);
 
       expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
-        sinon.match({ title: '"before each" hook' }),
+        sinon.match({ title: '"before each" hook in "resets timeout"' }),
         errorMatcher
       );
     });
@@ -608,7 +608,7 @@ describe(function() {
       expect(stats.failures).to.equal(0);
 
       expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
-        sinon.match({ title: '"before all" hook' }),
+        sinon.match({ title: '"before all" hook in "missing currentTest"' }),
         errorMatcher
       );
     });
