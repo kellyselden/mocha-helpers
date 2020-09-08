@@ -4,11 +4,9 @@ const path = require('path');
 const callsites = require('callsites');
 const commondir = require('commondir');
 const titleize = require('titleize');
-const Mocha = require('mocha');
+const { Runner, Test } = require('mocha');
 const EventEmitter = require('events');
 const { promisify } = require('util');
-
-const { Runner, Test } = Mocha;
 
 const titleSep = ' | ';
 
@@ -78,7 +76,7 @@ function wrapNewTitle(getFilePathTitle, options) {
         title = getFilePathTitle(title);
       }
 
-      let mocha = Mocha[test];
+      let mocha = global[test];
       if (modifier) {
         mocha = mocha[modifier];
       }
@@ -104,7 +102,7 @@ function skipOnError(callback) {
 // https://github.com/mochajs/mocha/issues/1480#issuecomment-487074628
 // https://github.com/mochajs/mocha/issues/2451#issuecomment-487074749
 function allowFail(title, callback, ...args) {
-  return Mocha.it.call(this, title, skipOnError(callback), ...args);
+  return global.it.call(this, title, skipOnError(callback), ...args);
 }
 
 const events = new EventEmitter();
@@ -112,7 +110,7 @@ const events = new EventEmitter();
 function wrapRetries(options) {
   return function wrapHook(hook) {
     return function mochaHook(callback, ...args) {
-      return Mocha[hook].call(this, async function() {
+      return global[hook].call(this, async function() {
         let start = new Date();
 
         let { test } = this;
@@ -230,12 +228,12 @@ function setUpObjectReset(obj) {
   let original;
   let list;
 
-  Mocha.before(function() {
+  global.before(function() {
     original = { ...obj };
     list = Object.getOwnPropertyNames(obj);
   });
 
-  Mocha.afterEach(function() {
+  global.afterEach(function() {
     for (let k of Object.getOwnPropertyNames(obj)) {
       if (!list.includes(k)) {
         delete obj[k];
