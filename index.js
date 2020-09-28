@@ -244,6 +244,18 @@ function setUpObjectReset(obj) {
   });
 }
 
+function setUpCwdReset() {
+  let original;
+
+  global.before(function() {
+    original = process.cwd();
+  });
+
+  global.afterEach(function() {
+    process.chdir(original);
+  });
+}
+
 function install({ exports }, options) {
   let callerFilePath = callsites()[1].getFileName();
 
@@ -281,7 +293,8 @@ function install({ exports }, options) {
   }
 
   Object.assign(exports, {
-    setUpObjectReset
+    setUpObjectReset,
+    setUpCwdReset
   });
 
   return titleGeneratorResult;
@@ -293,5 +306,6 @@ Object.assign(module.exports, {
   formatTitle,
   titleSeparator: titleSep,
   events,
-  setUpObjectReset
+  setUpObjectReset,
+  setUpCwdReset
 });
