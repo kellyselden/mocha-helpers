@@ -21,6 +21,10 @@ describe(setUpObjectReset, function() {
     expect(original).to.not.have.property('baz');
   });
 
+  it('resets properties', function() {
+    original.foo = 'bar';
+  });
+
   it('deletes added properties', function() {
     original.baz = 'baz';
   });
