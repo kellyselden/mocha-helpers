@@ -229,12 +229,15 @@ function setUpObjectReset(obj) {
   let list;
 
   global.before(function() {
-    original = { ...obj };
-    list = Object.getOwnPropertyNames(obj);
+    original = {};
+    list = Object.keys(obj);
+    for (let k of list) {
+      original[k] = obj[k];
+    }
   });
 
   global.afterEach(function() {
-    for (let k of Object.getOwnPropertyNames(obj)) {
+    for (let k of Object.keys(obj)) {
       if (!list.includes(k)) {
         delete obj[k];
       } else if (original[k] !== obj[k]) {

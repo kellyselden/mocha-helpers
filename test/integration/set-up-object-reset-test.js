@@ -4,19 +4,24 @@ const { describe, it, setUpObjectReset } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 
 let original = {
-  foo: 'bar'
+  foo: 'foo'
 };
+
+Object.defineProperty(original, 'bar', {
+  value: 'bar'
+});
 
 describe(setUpObjectReset, function() {
   // eslint-disable-next-line mocha/no-setup-in-describe
   setUpObjectReset(original);
 
   afterEach(function() {
-    expect(original.foo).to.equal('bar');
-    expect(original).to.not.have.property('bar');
+    expect(original.foo).to.equal('foo');
+    expect(original.bar).to.equal('bar');
+    expect(original).to.not.have.property('baz');
   });
 
   it('deletes added properties', function() {
-    original.bar = 'baz';
+    original.baz = 'baz';
   });
 });
