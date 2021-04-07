@@ -230,7 +230,7 @@ function setUpObjectReset(obj) {
 
   global.before(function() {
     original = {};
-    list = Object.keys(obj);
+    list = new Set(Object.keys(obj));
     for (let k of list) {
       original[k] = obj[k];
     }
@@ -238,7 +238,7 @@ function setUpObjectReset(obj) {
 
   global.afterEach(function() {
     for (let k of Object.keys(obj)) {
-      if (!list.includes(k)) {
+      if (!list.has(k)) {
         delete obj[k];
       }
     }
