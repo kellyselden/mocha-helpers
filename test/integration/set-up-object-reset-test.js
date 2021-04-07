@@ -25,6 +25,10 @@ describe(setUpObjectReset, function() {
     original.foo = 'bar';
   });
 
+  it('adds deleted properties back', function() {
+    delete original.foo;
+  });
+
   it('deletes added properties', function() {
     original.baz = 'baz';
   });
