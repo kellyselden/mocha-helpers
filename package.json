@@ -36,7 +36,7 @@
     "titleize": "^2.1.0"
   },
   "devDependencies": {
-    "@kellyselden/node-template": "1.4.1",
+    "@kellyselden/node-template": "1.4.2",
     "chai": "^4.2.0",
     "eslint": "^7.15.0",
     "eslint-config-sane": "^1.0.0",
