@@ -240,7 +240,10 @@ function setUpObjectReset(obj) {
     for (let k of Object.keys(obj)) {
       if (!list.includes(k)) {
         delete obj[k];
-      } else if (obj[k] !== original[k]) {
+      }
+    }
+    for (let k of list) {
+      if (obj[k] !== original[k]) {
         obj[k] = original[k];
       }
     }
