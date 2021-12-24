@@ -306,8 +306,7 @@ function install({ exports }, options) {
   return titleGeneratorResult;
 }
 
-module.exports = install;
-Object.assign(module.exports, {
+module.exports = Object.assign(install, {
   isAlreadyInMocha,
   formatTitle,
   titleSeparator: titleSep,
