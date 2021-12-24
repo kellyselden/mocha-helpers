@@ -307,6 +307,9 @@ function install({ exports }, options) {
 }
 
 module.exports = Object.assign(install, {
+  // make it easier to import in ESM/TS
+  default: install,
+
   isAlreadyInMocha,
   formatTitle,
   titleSeparator: titleSep,
