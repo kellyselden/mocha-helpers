@@ -262,6 +262,15 @@ function setUpCwdReset() {
   });
 }
 
+function setUpTmpDir() {
+  // eslint-disable-next-line prefer-let/prefer-let
+  const createTmpDir = promisify(require('tmp').dir);
+
+  global.beforeEach(async function() {
+    this.tmpPath = await createTmpDir();
+  });
+}
+
 function install({ exports }, options) {
   let callerFilePath = callsites()[1].getFileName();
 
@@ -315,5 +324,6 @@ module.exports = Object.assign(install, {
   titleSeparator: titleSep,
   events,
   setUpObjectReset,
-  setUpCwdReset
+  setUpCwdReset,
+  setUpTmpDir
 });

@@ -33,7 +33,8 @@
     "callsites": "^3.0.0",
     "commondir": "^1.0.1",
     "mocha": "^9.1.2",
-    "titleize": "^2.1.0"
+    "titleize": "^2.1.0",
+    "tmp": "0.2.1"
   },
   "devDependencies": {
     "@kellyselden/node-template": "2.1.1",
