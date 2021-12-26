@@ -309,7 +309,8 @@ function install({ exports }, options) {
 
   Object.assign(exports, {
     setUpObjectReset,
-    setUpCwdReset
+    setUpCwdReset,
+    setUpTmpDir
   });
 
   return titleGeneratorResult;
