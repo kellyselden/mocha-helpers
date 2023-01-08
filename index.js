@@ -5,7 +5,7 @@ const callsites = require('callsites');
 const commondir = require('commondir');
 const titleize = require('titleize');
 const { Runner, Test } = require('mocha');
-const EventEmitter = require('events');
+const Emittery = require('emittery');
 const { promisify } = require('util');
 
 const titleSep = ' | ';
@@ -105,7 +105,7 @@ function allowFail(title, callback, ...args) {
   return global.it.call(this, title, skipOnError(callback), ...args);
 }
 
-const events = new EventEmitter();
+const events = new Emittery();
 
 function wrapRetries(options) {
   return function wrapHook(hook) {
@@ -152,11 +152,11 @@ function wrapRetries(options) {
           return clone;
         }
 
-        function setUpRetryAndClone(err) {
+        async function setUpRetryAndClone(err) {
+          await events.emit(Runner.constants.EVENT_TEST_RETRY, test, err);
+
           let currentRetry = test.currentRetry();
           test.currentRetry(++currentRetry);
-
-          events.emit(Runner.constants.EVENT_TEST_RETRY, test, err);
 
           // test.resetTimeout();
           // dirty hack because `resetTimeout` doesn't work the way you'd expect
@@ -179,14 +179,14 @@ function wrapRetries(options) {
           }
         };
 
-        test.callback = function(err) {
+        test.callback = async function(err) {
           if (!shouldRetry()) {
             resetOverrides();
 
             return testCallback.apply(this, arguments);
           }
 
-          let clone = setUpRetryAndClone(err);
+          let clone = await setUpRetryAndClone(err);
 
           clone.run(function() {
             // The original test that timed out needs to be reset
@@ -213,7 +213,7 @@ function wrapRetries(options) {
 
           test.clearTimeout();
 
-          let clone = setUpRetryAndClone(err);
+          let clone = await setUpRetryAndClone(err);
 
           let run = promisify(clone.run.bind(clone));
 
