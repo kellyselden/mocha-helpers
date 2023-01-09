@@ -153,10 +153,10 @@ function wrapRetries(options) {
         }
 
         function setUpRetryAndClone(err) {
+          events.emit(Runner.constants.EVENT_TEST_RETRY, test, err);
+
           let currentRetry = test.currentRetry();
           test.currentRetry(++currentRetry);
-
-          events.emit(Runner.constants.EVENT_TEST_RETRY, test, err);
 
           // test.resetTimeout();
           // dirty hack because `resetTimeout` doesn't work the way you'd expect
