@@ -164,7 +164,9 @@ function wrapRetries(options) {
 
           let _clone = clone(test);
 
-          return _clone;
+          let run = promisify(_clone.run.bind(_clone));
+
+          return run;
         }
 
         function resetOverrides() {
@@ -179,16 +181,16 @@ function wrapRetries(options) {
           }
         };
 
-        test.callback = function(err) {
+        test.callback = async function(err) {
           if (!shouldRetry()) {
             resetOverrides();
 
             return testCallback.apply(this, arguments);
           }
 
-          let clone = setUpRetryAndClone(err);
+          let run = setUpRetryAndClone(err);
 
-          clone.run(function() {
+          await run(function() {
             // The original test that timed out needs to be reset
             // so it can properly finish.
             let {
@@ -223,9 +225,7 @@ function wrapRetries(options) {
 
           test.clearTimeout();
 
-          let clone = setUpRetryAndClone(err);
-
-          let run = promisify(clone.run.bind(clone));
+          let run = setUpRetryAndClone(err);
 
           await run();
         }
