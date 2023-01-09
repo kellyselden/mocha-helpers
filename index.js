@@ -5,7 +5,7 @@ const callsites = require('callsites');
 const commondir = require('commondir');
 const titleize = require('titleize');
 const { Runner, Test } = require('mocha');
-const EventEmitter = require('events');
+const EventEmitter = require('events-async');
 const { promisify } = require('util');
 
 const titleSep = ' | ';
@@ -152,8 +152,8 @@ function wrapRetries(options) {
           return clone;
         }
 
-        function setUpRetryAndClone(err) {
-          events.emit(Runner.constants.EVENT_TEST_RETRY, test, err);
+        async function setUpRetryAndClone(err) {
+          await events.emit(Runner.constants.EVENT_TEST_RETRY, test, err);
 
           let currentRetry = test.currentRetry();
           test.currentRetry(++currentRetry);
@@ -188,7 +188,7 @@ function wrapRetries(options) {
             return testCallback.apply(this, arguments);
           }
 
-          let run = setUpRetryAndClone(err);
+          let run = await setUpRetryAndClone(err);
 
           await run(function() {
             // The original test that timed out needs to be reset
@@ -225,7 +225,7 @@ function wrapRetries(options) {
 
           test.clearTimeout();
 
-          let run = setUpRetryAndClone(err);
+          let run = await setUpRetryAndClone(err);
 
           await run();
         }
