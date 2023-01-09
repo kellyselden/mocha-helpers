@@ -191,14 +191,24 @@ function wrapRetries(options) {
           clone.run(function() {
             // The original test that timed out needs to be reset
             // so it can properly finish.
-            test.timedOut = false;
+            let {
+              timedOut,
+              _timeout
+            } = test;
+            Object.assign(test, {
+              timedOut: false,
+              _timeout: Number.MAX_SAFE_INTEGER
+            });
 
             let returnValue = testCallback.apply(this, arguments);
 
             // Then mark it timed out again. In case the original
             // timed out hook ever completes, we want it to early exit
             // in its callback.
-            test.timedOut = true;
+            Object.assign(test, {
+              timedOut,
+              _timeout
+            });
 
             return returnValue;
           });
