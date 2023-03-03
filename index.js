@@ -108,6 +108,14 @@ function allowFail(title, callback, ...args) {
 const events = new EventEmitter();
 
 function wrapRetries(options) {
+  function clone(hook) {
+    hook.retriedTest = () => {};
+    let clone = Test.prototype.clone.call(hook);
+    delete hook.retriedTest;
+    clone.type = hook.type;
+    return clone;
+  }
+
   return function wrapHook(hook) {
     return function mochaHook(callback, ...args) {
       return global[hook].call(this, async function() {
@@ -142,14 +150,6 @@ function wrapRetries(options) {
           }
 
           return true;
-        }
-
-        function clone(hook) {
-          hook.retriedTest = () => {};
-          let clone = Test.prototype.clone.call(hook);
-          delete hook.retriedTest;
-          clone.type = hook.type;
-          return clone;
         }
 
         async function setUpRetryAndClone(err) {
