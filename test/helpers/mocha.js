@@ -5,7 +5,10 @@ require('../..')(module);
 const Mocha = require('mocha');
 
 async function runTests(files, options) {
-  let mocha = new Mocha(options);
+  let mocha = new Mocha({
+    timeout: this._runnable._timeout,
+    ...options
+  });
 
   for (let file of files) {
     mocha.addFile(file);
