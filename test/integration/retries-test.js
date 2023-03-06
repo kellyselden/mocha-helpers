@@ -24,7 +24,7 @@ describe(function() {
           grep,
           ...options
         }
-      );
+      ).promise;
     };
 
     retryEventSpy = sinon.spy();
