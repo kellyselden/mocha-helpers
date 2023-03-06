@@ -80,6 +80,40 @@ Prints:
     ✓ works
 ```
 
+## Async Events
+
+Add a way to `await` Mocha's synchronous events.
+
+```js
+const { events, registerAsyncEvents, unregisterAsyncEvents } = require('mocha-helpers');
+
+let runner;
+
+async function retry(test, err) {
+  // do something async on retries...
+}
+
+try {
+  await new Promise((resolve, reject) => {
+    try {
+      events.on(constants.EVENT_TEST_RETRY, retry);
+
+      runner = mocha.run(resolve);
+
+      registerAsyncEvents(runner);
+    } catch (err) {
+      reject(err);
+    }
+  });
+} finally {
+  events.off(constants.EVENT_TEST_RETRY, retry);
+
+  if (runner) {
+    await unregisterAsyncEvents(runner);
+  }
+}
+```
+
 ## Options
 
 ```js

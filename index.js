@@ -216,6 +216,8 @@ function wrapRetries(options) {
           });
         };
 
+        await waitForPromisesToFlushBetweenTests();
+
         try {
           return await callback.call(this, arguments);
         } catch (err) {
@@ -326,6 +328,66 @@ function install({ exports }, options) {
   return titleGeneratorResult;
 }
 
+let promisesToFlushBetweenTests = [];
+let promiseErrorsBetweenTests = [];
+
+async function waitForPromisesToFlushBetweenTests() {
+  await Promise.all(promisesToFlushBetweenTests);
+
+  promisesToFlushBetweenTests = [];
+}
+
+const asyncEventsCallbacks = new Map();
+
+function registerAsyncEvents(runner) {
+  for (let eventName of Object.values(Runner.constants)) {
+    if (asyncEventsCallbacks.has(eventName)) {
+      throw new Error(`You already called "${registerAsyncEvents.name}". You must call "${unregisterAsyncEvents.name}" first.`);
+    }
+
+    // eslint-disable-next-line no-inner-declarations
+    function callback() {
+      let promise = events.emit(eventName, ...arguments);
+
+      // Mocha inspects the Promise rejection queue on exit or something.
+      // We can't leave any rejecting promises for later.
+      promise = promise.catch(err => promiseErrorsBetweenTests.push(err));
+
+      // This allows us to wait for promises before continuing
+      // when using Mocha's synchronous events.
+      promisesToFlushBetweenTests.push(promise);
+    }
+
+    asyncEventsCallbacks.set(eventName, callback);
+
+    runner.on(eventName, callback);
+  }
+}
+
+async function unregisterAsyncEvents(runner) {
+  for (let eventName of Object.values(Runner.constants)) {
+    if (!asyncEventsCallbacks.has(eventName)) {
+      throw new Error(`You must call "${registerAsyncEvents.name}" first.`);
+    }
+
+    let callback = asyncEventsCallbacks.get(eventName);
+
+    asyncEventsCallbacks.delete(eventName);
+
+    runner.off(eventName, callback);
+  }
+
+  await waitForPromisesToFlushBetweenTests();
+
+  try {
+    if (promiseErrorsBetweenTests.length) {
+      throw promiseErrorsBetweenTests[0];
+    }
+  } finally {
+    promiseErrorsBetweenTests = [];
+  }
+}
+
 module.exports = Object.assign(install, {
   // make it easier to import in ESM/TS
   default: install,
@@ -336,5 +398,7 @@ module.exports = Object.assign(install, {
   events,
   setUpObjectReset,
   setUpCwdReset,
-  setUpTmpDir
+  setUpTmpDir,
+  registerAsyncEvents,
+  unregisterAsyncEvents
 });
