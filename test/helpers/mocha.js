@@ -16,16 +16,22 @@ async function runTests(files, options) {
 
   let runner;
 
-  await new Promise(resolve => {
-    // `mocha.run` is synchronous if no tests were found,
-    // otherwise, it's asynchronous...
-    runner = mocha.run(resolve);
-  });
-
-  // unfortunately, mocha caches previously run files,
-  // even though it is a new instance...
-  // https://github.com/mochajs/mocha/blob/v6.2.0/lib/mocha.js#L334
-  mocha.unloadFiles();
+  try {
+    await new Promise((resolve, reject) => {
+      try {
+        // `mocha.run` is synchronous if no tests were found,
+        // otherwise, it's asynchronous...
+        runner = mocha.run(resolve);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  } finally {
+    // unfortunately, mocha caches previously run files,
+    // even though it is a new instance...
+    // https://github.com/mochajs/mocha/blob/v6.2.0/lib/mocha.js#L334
+    mocha.unloadFiles();
+  }
 
   return runner.stats;
 }
