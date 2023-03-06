@@ -17,7 +17,8 @@ describe(function() {
 
   before(function() {
     this.runTests = async options => {
-      return await runTests(
+      return await runTests.call(
+        this,
         [path.resolve(__dirname, '../fixtures/retries-test.js')],
         {
           grep,
