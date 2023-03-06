@@ -61,9 +61,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
           sinon.match({ title: '"before all" hook in "before"' }),
@@ -78,9 +80,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -88,9 +92,11 @@ describe(function() {
       it('can still fail', async function() {
         let stats = await this.runTests();
 
-        expect(stats.tests).to.equal(0);
-        expect(stats.passes).to.equal(0);
-        expect(stats.failures).to.equal(1);
+        expect(stats).matches(sinon.match({
+          tests: 0,
+          passes: 0,
+          failures: 1
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -106,9 +112,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
           sinon.match({ title: '"before each" hook in "beforeEach"' }),
@@ -123,9 +131,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -133,9 +143,11 @@ describe(function() {
       it('can still fail', async function() {
         let stats = await this.runTests();
 
-        expect(stats.tests).to.equal(0);
-        expect(stats.passes).to.equal(0);
-        expect(stats.failures).to.equal(1);
+        expect(stats).matches(sinon.match({
+          tests: 0,
+          passes: 0,
+          failures: 1
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -151,9 +163,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
           sinon.match({ title: '"after each" hook in "afterEach"' }),
@@ -168,9 +182,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -178,9 +194,11 @@ describe(function() {
       it('can still fail', async function() {
         let stats = await this.runTests();
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(1);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 1
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -196,9 +214,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
           sinon.match({ title: '"after all" hook in "after"' }),
@@ -213,9 +233,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -223,9 +245,11 @@ describe(function() {
       it('can still fail', async function() {
         let stats = await this.runTests();
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(1);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 1
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -246,9 +270,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.callCount(4);
       });
@@ -263,9 +289,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -280,9 +308,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(1);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 1
+        }));
 
         expect(retryEventSpy).to.have.callCount(4);
       });
@@ -300,9 +330,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
           sinon.match({ title: '"before all" hook in "before"' }),
@@ -317,9 +349,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -327,9 +361,11 @@ describe(function() {
       it('can still fail', async function() {
         let stats = await this.runTests();
 
-        expect(stats.tests).to.equal(0);
-        expect(stats.passes).to.equal(0);
-        expect(stats.failures).to.equal(1);
+        expect(stats).matches(sinon.match({
+          tests: 0,
+          passes: 0,
+          failures: 1
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -345,9 +381,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
           sinon.match({ title: '"before each" hook in "beforeEach"' }),
@@ -362,9 +400,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -372,9 +412,11 @@ describe(function() {
       it('can still fail', async function() {
         let stats = await this.runTests();
 
-        expect(stats.tests).to.equal(0);
-        expect(stats.passes).to.equal(0);
-        expect(stats.failures).to.equal(1);
+        expect(stats).matches(sinon.match({
+          tests: 0,
+          passes: 0,
+          failures: 1
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -390,9 +432,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
           sinon.match({ title: '"after each" hook in "afterEach"' }),
@@ -407,9 +451,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -417,9 +463,11 @@ describe(function() {
       it('can still fail', async function() {
         let stats = await this.runTests();
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(1);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 1
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -435,9 +483,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
           sinon.match({ title: '"after all" hook in "after"' }),
@@ -452,9 +502,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -462,9 +514,11 @@ describe(function() {
       it('can still fail', async function() {
         let stats = await this.runTests();
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(1);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 1
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -485,9 +539,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.callCount(4);
       });
@@ -502,9 +558,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(0);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 0
+        }));
 
         expect(retryEventSpy).to.have.not.been.called;
       });
@@ -519,9 +577,11 @@ describe(function() {
           retries: 1
         });
 
-        expect(stats.tests).to.equal(1);
-        expect(stats.passes).to.equal(1);
-        expect(stats.failures).to.equal(1);
+        expect(stats).matches(sinon.match({
+          tests: 1,
+          passes: 1,
+          failures: 1
+        }));
 
         expect(retryEventSpy).to.have.callCount(4);
       });
@@ -536,9 +596,11 @@ describe(function() {
         retries: 1
       });
 
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(0);
+      expect(stats).matches(sinon.match({
+        tests: 1,
+        passes: 1,
+        failures: 0
+      }));
 
       expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
         sinon.match({ title: '"before each" hook in "resets timeout"' }),
@@ -555,9 +617,11 @@ describe(function() {
         retries: 1
       });
 
-      expect(stats.tests).to.equal(0);
-      expect(stats.passes).to.equal(0);
-      expect(stats.failures).to.equal(1);
+      expect(stats).matches(sinon.match({
+        tests: 0,
+        passes: 0,
+        failures: 1
+      }));
 
       expect(retryEventSpy).to.have.been.calledOnce;
     });
@@ -569,9 +633,11 @@ describe(function() {
         retries: 1
       });
 
-      expect(stats.tests).to.equal(0);
-      expect(stats.passes).to.equal(0);
-      expect(stats.failures).to.equal(1);
+      expect(stats).matches(sinon.match({
+        tests: 0,
+        passes: 0,
+        failures: 1
+      }));
 
       expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
         sinon.match({ title: '"before each" hook for "works"' }),
@@ -586,9 +652,11 @@ describe(function() {
         retries: 1
       });
 
-      expect(stats.tests).to.equal(0);
-      expect(stats.passes).to.equal(0);
-      expect(stats.failures).to.equal(1);
+      expect(stats).matches(sinon.match({
+        tests: 0,
+        passes: 0,
+        failures: 1
+      }));
 
       expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
         sinon.match({ title: '"before each" hook for "works"' }),
@@ -603,9 +671,11 @@ describe(function() {
         retries: 1
       });
 
-      expect(stats.tests).to.equal(1);
-      expect(stats.passes).to.equal(1);
-      expect(stats.failures).to.equal(0);
+      expect(stats).matches(sinon.match({
+        tests: 1,
+        passes: 1,
+        failures: 0
+      }));
 
       expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
         sinon.match({ title: '"before all" hook in "missing currentTest"' }),
