@@ -9,7 +9,6 @@ const {
   registerAsyncEvents,
   unregisterAsyncEvents
 } = require('../..');
-const pDefer = require('p-defer');
 
 describe(function() {
   let asyncEventStub;
@@ -50,7 +49,9 @@ describe(function() {
     events.on(Runner.constants.EVENT_TEST_PASS, asyncEventStub);
   });
 
-  beforeEach(function() {
+  beforeEach(async function() {
+    let { default: pDefer } = await import('p-defer');
+
     deferredPromise = pDefer();
   });
 
