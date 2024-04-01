@@ -47,7 +47,7 @@
     "eslint-plugin-mocha": "^10.2.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prefer-let": "^3.0.1",
-    "p-defer": "4.0.0",
+    "p-defer": "4.0.1",
     "renovate-config-standard": "2.1.2",
     "sinon": "^17.0.0",
     "sinon-chai": "^3.7.0",
