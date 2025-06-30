@@ -236,6 +236,12 @@ function wrapRetries(options) {
   };
 }
 
+/**
+ * @param {*} obj
+ * @param {Object} options
+ * @param {(callback: () => void) => void} options.beforeAll
+ * @param {(callback: () => void) => void} options.afterEach
+ */
 function setUpObjectReset(obj, {
   beforeAll = global.before,
   afterEach = global.afterEach
