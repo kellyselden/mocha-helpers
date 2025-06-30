@@ -236,11 +236,14 @@ function wrapRetries(options) {
   };
 }
 
-function setUpObjectReset(obj) {
+function setUpObjectReset(obj, {
+  beforeAll = global.before,
+  afterEach = global.afterEach
+} = {}) {
   let original;
   let list;
 
-  global.before(function() {
+  beforeAll(function() {
     original = {};
     list = new Set(Object.keys(obj));
     for (let k of list) {
@@ -248,7 +251,7 @@ function setUpObjectReset(obj) {
     }
   });
 
-  global.afterEach(function() {
+  afterEach(function() {
     for (let k of Object.keys(obj)) {
       if (!list.has(k)) {
         delete obj[k];

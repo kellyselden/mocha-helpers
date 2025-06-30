@@ -2,6 +2,7 @@
 
 const { describe, it, setUpObjectReset } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
+const sinon = require('sinon');
 
 describe(setUpObjectReset, function() {
   describe('standard', function() {
@@ -33,6 +34,33 @@ describe(setUpObjectReset, function() {
 
     it('deletes added properties', function() {
       original.baz = 'baz';
+    });
+  });
+
+  describe('custom lifecycle hooks', function() {
+    it('works', function() {
+      let original = {
+        foo: 'foo'
+      };
+
+      let beforeAll = sinon.stub();
+      let afterEach = sinon.stub();
+
+      setUpObjectReset(original, {
+        beforeAll,
+        afterEach
+      });
+
+      expect(beforeAll).to.have.been.calledOnce;
+      expect(afterEach).to.have.been.calledOnce;
+
+      beforeAll.args[0][0]();
+
+      delete original.foo;
+
+      afterEach.args[0][0]();
+
+      expect(original.foo).to.equal('foo');
     });
   });
 });
