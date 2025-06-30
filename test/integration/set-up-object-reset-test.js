@@ -3,33 +3,36 @@
 const { describe, it, setUpObjectReset } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 
-let original = {
-  foo: 'foo'
-};
-
-Object.defineProperty(original, 'bar', {
-  value: 'bar'
-});
-
 describe(setUpObjectReset, function() {
-  // eslint-disable-next-line mocha/no-setup-in-describe
-  setUpObjectReset(original);
+  describe('standard', function() {
+    let original = {
+      foo: 'foo'
+    };
 
-  afterEach(function() {
-    expect(original.foo).to.equal('foo');
-    expect(original.bar).to.equal('bar');
-    expect(original).to.not.have.property('baz');
-  });
+    // eslint-disable-next-line mocha/no-setup-in-describe
+    Object.defineProperty(original, 'bar', {
+      value: 'bar'
+    });
 
-  it('resets properties', function() {
-    original.foo = 'bar';
-  });
+    // eslint-disable-next-line mocha/no-setup-in-describe
+    setUpObjectReset(original);
 
-  it('adds deleted properties back', function() {
-    delete original.foo;
-  });
+    afterEach(function() {
+      expect(original.foo).to.equal('foo');
+      expect(original.bar).to.equal('bar');
+      expect(original).to.not.have.property('baz');
+    });
 
-  it('deletes added properties', function() {
-    original.baz = 'baz';
+    it('resets properties', function() {
+      original.foo = 'bar';
+    });
+
+    it('adds deleted properties back', function() {
+      delete original.foo;
+    });
+
+    it('deletes added properties', function() {
+      original.baz = 'baz';
+    });
   });
 });
