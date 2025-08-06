@@ -35,7 +35,7 @@
     "events-async": "^1.2.1",
     "mocha": "^11.7.0",
     "titleize": "^2.1.0",
-    "tmp": "0.2.3"
+    "tmp": "0.2.4"
   },
   "devDependencies": {
     "@kellyselden/node-template": "6.4.0",
