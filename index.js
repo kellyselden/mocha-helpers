@@ -92,7 +92,7 @@ function skipOnError(callback) {
   return async function() {
     try {
       await callback.apply(this, arguments);
-    } catch (err) {
+    } catch {
       this.skip();
     }
   };
@@ -354,7 +354,6 @@ function registerAsyncEvents(runner) {
       throw new Error(`You already called "${registerAsyncEvents.name}". You must call "${unregisterAsyncEvents.name}" first.`);
     }
 
-    // eslint-disable-next-line no-inner-declarations
     function callback() {
       let promise = events.emit(eventName, ...arguments);
 
