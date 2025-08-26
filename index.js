@@ -23,7 +23,7 @@ function newTitleGenerator({
   dirname,
   titleSeparator = titleSep,
   titleize: _titleize = true,
-  prefix = ''
+  prefix = '',
 }) {
   return {
     titleSeparator,
@@ -46,7 +46,7 @@ function newTitleGenerator({
         }
       }
       return sections.join(titleSeparator);
-    }
+    },
   };
 }
 
@@ -195,11 +195,11 @@ function wrapRetries(options) {
             // so it can properly finish.
             let {
               timedOut,
-              _timeout
+              _timeout,
             } = test;
             Object.assign(test, {
               timedOut: false,
-              _timeout: Number.MAX_SAFE_INTEGER
+              _timeout: Number.MAX_SAFE_INTEGER,
             });
 
             let returnValue = testCallback.apply(this, arguments);
@@ -209,7 +209,7 @@ function wrapRetries(options) {
             // in its callback.
             Object.assign(test, {
               timedOut,
-              _timeout
+              _timeout,
             });
 
             return returnValue;
@@ -244,7 +244,7 @@ function wrapRetries(options) {
  */
 function setUpObjectReset(obj, {
   beforeAll = global.before,
-  afterEach = global.afterEach
+  afterEach = global.afterEach,
 } = {}) {
   let original;
   let list;
@@ -297,7 +297,7 @@ function install({ exports }, options) {
 
   options = {
     dirname: path.dirname(callerFilePath),
-    ...options
+    ...options,
   };
 
   let titleGeneratorResult = newTitleGenerator(options);
@@ -308,7 +308,7 @@ function install({ exports }, options) {
 
   for (let test of [
     'describe',
-    'it'
+    'it',
   ]) {
     exports[test] = wrapMocha(test);
     exports[test].only = wrapMocha(test, 'only');
@@ -323,7 +323,7 @@ function install({ exports }, options) {
     'before',
     'beforeEach',
     'afterEach',
-    'after'
+    'after',
   ]) {
     exports[hook] = wrapHook(hook);
   }
@@ -331,7 +331,7 @@ function install({ exports }, options) {
   Object.assign(exports, {
     setUpObjectReset,
     setUpCwdReset,
-    setUpTmpDir
+    setUpTmpDir,
   });
 
   return titleGeneratorResult;
@@ -408,5 +408,5 @@ module.exports = Object.assign(install, {
   setUpCwdReset,
   setUpTmpDir,
   registerAsyncEvents,
-  unregisterAsyncEvents
+  unregisterAsyncEvents,
 });

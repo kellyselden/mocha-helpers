@@ -7,7 +7,7 @@ const Mocha = require('mocha');
 function runTests(files, options) {
   let mocha = new Mocha({
     timeout: this._runnable._timeout,
-    ...options
+    ...options,
   });
 
   for (let file of files) {
@@ -39,7 +39,7 @@ function runTests(files, options) {
 
   return {
     promise,
-    runner
+    runner,
   };
 }
 
