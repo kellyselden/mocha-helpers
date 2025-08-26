@@ -7,12 +7,12 @@ const sinon = require('sinon');
 describe(setUpObjectReset, function() {
   describe('standard', function() {
     let original = {
-      foo: 'foo'
+      foo: 'foo',
     };
 
     // eslint-disable-next-line mocha/no-setup-in-describe
     Object.defineProperty(original, 'bar', {
-      value: 'bar'
+      value: 'bar',
     });
 
     // eslint-disable-next-line mocha/no-setup-in-describe
@@ -40,7 +40,7 @@ describe(setUpObjectReset, function() {
   describe('custom lifecycle hooks', function() {
     it('works', function() {
       let original = {
-        foo: 'foo'
+        foo: 'foo',
       };
 
       let beforeAll = sinon.stub();
@@ -48,7 +48,7 @@ describe(setUpObjectReset, function() {
 
       setUpObjectReset(original, {
         beforeAll,
-        afterEach
+        afterEach,
       });
 
       expect(beforeAll).to.have.been.calledOnce;

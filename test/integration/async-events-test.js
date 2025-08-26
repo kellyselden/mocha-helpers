@@ -7,7 +7,7 @@ const sinon = require('sinon');
 const { Runner } = require('mocha');
 const {
   registerAsyncEvents,
-  unregisterAsyncEvents
+  unregisterAsyncEvents,
 } = require('../..');
 
 describe(function() {
@@ -21,10 +21,10 @@ describe(function() {
     this.runTests = async() => {
       let {
         promise,
-        runner
+        runner,
       } = runTests.call(
         this,
-        [path.resolve(__dirname, '../fixtures/async-events-test.js')]
+        [path.resolve(__dirname, '../fixtures/async-events-test.js')],
       );
 
       try {
@@ -74,7 +74,7 @@ describe(function() {
 
     expect(stats).matches(sinon.match({
       tests: 1,
-      passes: 1
+      passes: 1,
     }));
 
     expect(global.afterEachSpy).to.have.been.calledOnce;

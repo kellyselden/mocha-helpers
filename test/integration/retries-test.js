@@ -22,8 +22,8 @@ describe(function() {
         [path.resolve(__dirname, '../fixtures/retries-test.js')],
         {
           grep,
-          ...options
-        }
+          ...options,
+        },
       ).promise;
     };
 
@@ -32,10 +32,10 @@ describe(function() {
     events.on(Runner.constants.EVENT_TEST_RETRY, retryEventSpy);
 
     errorMatcher = sinon.match.instanceOf(Error).and(sinon.match({
-      code: 'ERR_ASSERTION'
+      code: 'ERR_ASSERTION',
     }));
     timeoutMatcher = sinon.match.instanceOf(Error).and(sinon.match({
-      message: sinon.match('Timeout of 10ms exceeded.')
+      message: sinon.match('Timeout of 10ms exceeded.'),
     }));
   });
 
@@ -59,18 +59,18 @@ describe(function() {
 
       it('works', async function() {
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
           sinon.match({ title: '"before all" hook in "before"' }),
-          errorMatcher
+          errorMatcher,
         );
       });
 
@@ -78,13 +78,13 @@ describe(function() {
         global.FAILURE_COUNT = 0;
 
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -96,7 +96,7 @@ describe(function() {
         expect(stats).matches(sinon.match({
           tests: 0,
           passes: 0,
-          failures: 1
+          failures: 1,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -110,18 +110,18 @@ describe(function() {
 
       it('works', async function() {
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
           sinon.match({ title: '"before each" hook in "beforeEach"' }),
-          errorMatcher
+          errorMatcher,
         );
       });
 
@@ -129,13 +129,13 @@ describe(function() {
         global.FAILURE_COUNT = 0;
 
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -147,7 +147,7 @@ describe(function() {
         expect(stats).matches(sinon.match({
           tests: 0,
           passes: 0,
-          failures: 1
+          failures: 1,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -161,18 +161,18 @@ describe(function() {
 
       it('works', async function() {
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
           sinon.match({ title: '"after each" hook in "afterEach"' }),
-          errorMatcher
+          errorMatcher,
         );
       });
 
@@ -180,13 +180,13 @@ describe(function() {
         global.FAILURE_COUNT = 0;
 
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -198,7 +198,7 @@ describe(function() {
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 1
+          failures: 1,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -212,18 +212,18 @@ describe(function() {
 
       it('works', async function() {
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
           sinon.match({ title: '"after all" hook in "after"' }),
-          errorMatcher
+          errorMatcher,
         );
       });
 
@@ -231,13 +231,13 @@ describe(function() {
         global.FAILURE_COUNT = 0;
 
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -249,7 +249,7 @@ describe(function() {
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 1
+          failures: 1,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -268,13 +268,13 @@ describe(function() {
         global.AFTER_FAILURE_COUNT = 1;
 
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.callCount(4);
@@ -287,13 +287,13 @@ describe(function() {
         global.AFTER_FAILURE_COUNT = 0;
 
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -306,13 +306,13 @@ describe(function() {
         global.AFTER_FAILURE_COUNT = 2;
 
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 1
+          failures: 1,
         }));
 
         expect(retryEventSpy).to.have.callCount(4);
@@ -328,18 +328,18 @@ describe(function() {
 
       it('works', async function() {
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
           sinon.match({ title: '"before all" hook in "before"' }),
-          timeoutMatcher
+          timeoutMatcher,
         );
       });
 
@@ -347,13 +347,13 @@ describe(function() {
         global.FAILURE_COUNT = 0;
 
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -365,7 +365,7 @@ describe(function() {
         expect(stats).matches(sinon.match({
           tests: 0,
           passes: 0,
-          failures: 1
+          failures: 1,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -379,18 +379,18 @@ describe(function() {
 
       it('works', async function() {
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
           sinon.match({ title: '"before each" hook in "beforeEach"' }),
-          timeoutMatcher
+          timeoutMatcher,
         );
       });
 
@@ -398,13 +398,13 @@ describe(function() {
         global.FAILURE_COUNT = 0;
 
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -416,7 +416,7 @@ describe(function() {
         expect(stats).matches(sinon.match({
           tests: 0,
           passes: 0,
-          failures: 1
+          failures: 1,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -430,18 +430,18 @@ describe(function() {
 
       it('works', async function() {
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
           sinon.match({ title: '"after each" hook in "afterEach"' }),
-          timeoutMatcher
+          timeoutMatcher,
         );
       });
 
@@ -449,13 +449,13 @@ describe(function() {
         global.FAILURE_COUNT = 0;
 
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -467,7 +467,7 @@ describe(function() {
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 1
+          failures: 1,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -481,18 +481,18 @@ describe(function() {
 
       it('works', async function() {
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
           sinon.match({ title: '"after all" hook in "after"' }),
-          timeoutMatcher
+          timeoutMatcher,
         );
       });
 
@@ -500,13 +500,13 @@ describe(function() {
         global.FAILURE_COUNT = 0;
 
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -518,7 +518,7 @@ describe(function() {
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 1
+          failures: 1,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -537,13 +537,13 @@ describe(function() {
         global.AFTER_FAILURE_COUNT = 1;
 
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.callCount(4);
@@ -556,13 +556,13 @@ describe(function() {
         global.AFTER_FAILURE_COUNT = 0;
 
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 0
+          failures: 0,
         }));
 
         expect(retryEventSpy).to.have.not.been.called;
@@ -575,13 +575,13 @@ describe(function() {
         global.AFTER_FAILURE_COUNT = 2;
 
         let stats = await this.runTests({
-          retries: 1
+          retries: 1,
         });
 
         expect(stats).matches(sinon.match({
           tests: 1,
           passes: 1,
-          failures: 1
+          failures: 1,
         }));
 
         expect(retryEventSpy).to.have.callCount(4);
@@ -594,18 +594,18 @@ describe(function() {
       grep = 'errors and timeouts resets timeout works$';
 
       let stats = await this.runTests({
-        retries: 1
+        retries: 1,
       });
 
       expect(stats).matches(sinon.match({
         tests: 1,
         passes: 1,
-        failures: 0
+        failures: 0,
       }));
 
       expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
         sinon.match({ title: '"before each" hook in "resets timeout"' }),
-        errorMatcher
+        errorMatcher,
       );
     });
 
@@ -615,13 +615,13 @@ describe(function() {
       global.FAILURE_COUNT = 2;
 
       let stats = await this.runTests({
-        retries: 1
+        retries: 1,
       });
 
       expect(stats).matches(sinon.match({
         tests: 0,
         passes: 0,
-        failures: 1
+        failures: 1,
       }));
 
       expect(retryEventSpy).to.have.been.calledOnce;
@@ -631,18 +631,18 @@ describe(function() {
       grep = 'errors and timeouts error after timeout works$';
 
       let stats = await this.runTests({
-        retries: 1
+        retries: 1,
       });
 
       expect(stats).matches(sinon.match({
         tests: 0,
         passes: 0,
-        failures: 1
+        failures: 1,
       }));
 
       expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
         sinon.match({ title: '"before each" hook for "works"' }),
-        timeoutMatcher
+        timeoutMatcher,
       );
     });
 
@@ -650,18 +650,18 @@ describe(function() {
       grep = 'errors and timeouts time out after error works$';
 
       let stats = await this.runTests({
-        retries: 1
+        retries: 1,
       });
 
       expect(stats).matches(sinon.match({
         tests: 0,
         passes: 0,
-        failures: 1
+        failures: 1,
       }));
 
       expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
         sinon.match({ title: '"before each" hook for "works"' }),
-        errorMatcher
+        errorMatcher,
       );
     });
 
@@ -669,18 +669,18 @@ describe(function() {
       grep = 'errors and timeouts missing currentTest describe works$';
 
       let stats = await this.runTests({
-        retries: 1
+        retries: 1,
       });
 
       expect(stats).matches(sinon.match({
         tests: 1,
         passes: 1,
-        failures: 0
+        failures: 0,
       }));
 
       expect(retryEventSpy).to.have.been.calledOnce.and.calledWith(
         sinon.match({ title: '"before all" hook in "missing currentTest"' }),
-        errorMatcher
+        errorMatcher,
       );
     });
   });
