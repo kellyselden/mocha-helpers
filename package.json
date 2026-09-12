@@ -38,7 +38,7 @@
     "@kellyselden/eslint-config": "^2.0.0",
     "@kellyselden/node-template": "7.7.0",
     "chai": "^4.5.0",
-    "eslint": "^9.34.0",
+    "eslint": "^10.0.0",
     "p-defer": "4.0.1",
     "sinon": "^21.0.0",
     "sinon-chai": "^3.7.0",
