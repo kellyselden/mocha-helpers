@@ -1,6 +1,6 @@
 {
   "name": "mocha-helpers",
-  "version": "11.0.0",
+  "version": "11.0.1",
   "description": "Mocha convenience helpers",
   "keywords": [
     "describe",
