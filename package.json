@@ -27,7 +27,7 @@
     "test": "mocha"
   },
   "dependencies": {
-    "callsites": "^3.0.0",
+    "callsites": "^4.0.0",
     "commondir": "^1.0.1",
     "events-async": "^1.2.1",
     "mocha": "^11.7.1",
